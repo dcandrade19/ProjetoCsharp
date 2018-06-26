@@ -1,0 +1,277 @@
+﻿<Window x:Class="ProjetoRevenda2.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ProjetoRevenda2"
+        mc:Ignorable="d"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        Background="{DynamicResource MaterialDesignPaper}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="14"
+        FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto" 
+        Title="MainWindow" Height="562" Width="936" ResizeMode="CanMinimize">
+    <TabControl>
+        <TabItem Header="Produtos" x:Name="tabProdutos">
+            <Grid Margin="0,10,0,0" VerticalAlignment="Top">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="500"></ColumnDefinition>
+                    <ColumnDefinition Width="20"></ColumnDefinition>
+                    <ColumnDefinition Width="400"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"></RowDefinition>
+                    <RowDefinition Height="20"></RowDefinition>
+                    <RowDefinition Height="460"></RowDefinition>
+                </Grid.RowDefinitions>
+                <TextBlock Foreground="DarkSlateGray" Grid.Column="0" Grid.Row="0" FontWeight="Bold">Produtos</TextBlock>
+                <DataGrid x:Name="dataModelos" AutoGenerateColumns="False" IsReadOnly="True" Grid.Column="0" Grid.Row="2" ItemsSource="{Binding Modelos}" SelectedItem="{Binding ModeloSelecionado}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="#" Binding="{Binding IdModelo}"/>
+                        <DataGridTextColumn Header="Modelo" Binding="{Binding Nome}"/>
+                        <DataGridCheckBoxColumn Header="Cadarço" Binding="{Binding Cardarco}"/>
+                        <DataGridTextColumn Header="Material" Binding="{Binding Material}"/>
+                        <DataGridTextColumn Header="Cor" Binding="{Binding Cor}"/>
+                        <DataGridTextColumn Header="Estoque" Binding="{Binding TotalEstoque}"/>
+                        <DataGridTextColumn Header="Preço" Binding="{Binding Preco}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+                <TextBlock Foreground="DarkSlateGray" Grid.Column="2" Grid.Row="0" FontWeight="Bold" TextDecorations="{x:Null}">Produto atual</TextBlock>
+                <StackPanel Grid.Column="2" Grid.Row="2">
+                    <StackPanel Margin="0,0,0,16" Orientation="Horizontal">
+                        <TextBlock Foreground="DarkSlateGray" VerticalAlignment="Center" Margin="0,0,10,0" FontWeight="Bold">ID:</TextBlock>
+                        <TextBox Width="30" TextAlignment="Center" IsReadOnly="True" Text="{Binding Path=ModeloSelecionado.IdModelo,Mode=OneWay}"></TextBox>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <StackPanel Margin="0,0,30,16" Orientation="Vertical">
+                            <TextBlock Foreground="DarkSlateGray"  VerticalAlignment="Center" Margin="0,0,10,0" FontWeight="Bold">Modelo:</TextBlock>
+                            <TextBox Text="{Binding Path=ModeloSelecionado.Nome,Mode=TwoWay,NotifyOnValidationError=True}" Width="140"/>
+                        </StackPanel>
+                        <StackPanel Margin="0,0,0,16" Orientation="Horizontal">
+                            <CheckBox Foreground="DarkSlateGray" IsChecked="{Binding Path=ModeloSelecionado.Cardarco,Mode=TwoWay}" VerticalAlignment="Center" Margin="0,0,10,0" FontWeight="Bold" Width="140">Cadarço</CheckBox>
+                        </StackPanel>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <StackPanel Margin="0,0,30,16" Orientation="Vertical">
+                            <TextBlock Foreground="DarkSlateGray"  VerticalAlignment="Center" Margin="0,0,10,0" FontWeight="Bold">Material:</TextBlock>
+                            <ComboBox x:Name="cbxMateriais" SelectedValue="{Binding Path=ModeloSelecionado.Material,Mode=TwoWay}" Width="140"></ComboBox>
+                        </StackPanel>
+                        <StackPanel Margin="0,0,0,16" Orientation="Vertical">
+                            <TextBlock Foreground="DarkSlateGray"  VerticalAlignment="Center" Margin="0,0,10,0" FontWeight="Bold">Cor:</TextBlock>
+                            <ComboBox x:Name="cbxCores" SelectedValue="{Binding Path=ModeloSelecionado.Cor,Mode=TwoWay}" Width="140"></ComboBox>
+                        </StackPanel>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <StackPanel Margin="0,0,0,16" Orientation="Vertical">
+                            <TextBlock Foreground="DarkSlateGray"  VerticalAlignment="Center" Margin="0,0,10,0" FontWeight="Bold">Estoque:</TextBlock>
+                            <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding Path=ModeloSelecionado.Estoques}" Height="155" Width="218">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Binding="{Binding Tamanho}" Header="Tamanho"/>
+                                    <DataGridTextColumn Binding="{Binding Quantidade}" Header="Quantidade"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </StackPanel>
+                        <StackPanel  Margin="10,0" VerticalAlignment="Stretch" Orientation="Vertical">
+                            <StackPanel Margin="0,0,0,16" Orientation="Vertical">
+                                <TextBlock Foreground="DarkSlateGray"  VerticalAlignment="Center" Margin="0,0,10,0" FontWeight="Bold">Tamanho:</TextBlock>
+                                <ComboBox x:Name="cbxTamanhos"  SelectedIndex="0"></ComboBox>
+                            </StackPanel>
+                            <StackPanel Margin="0,0,0,16" Orientation="Vertical">
+                                <TextBlock Foreground="DarkSlateGray"  VerticalAlignment="Center" Margin="0,0,10,0" FontWeight="Bold">Quantidade:</TextBlock>
+                                <ComboBox x:Name="cbxQuantidades" SelectedIndex="0"></ComboBox>
+                            </StackPanel>
+                            <Button x:Name="btnAddEstoque" Click="BtnAddEstoque_Click">Add</Button>
+                        </StackPanel>
+                    </StackPanel>
+                    <StackPanel  Orientation="Horizontal">
+                        <StackPanel Margin="0,0,0,16" Orientation="Vertical">
+                            <TextBlock Foreground="DarkSlateGray"  VerticalAlignment="Center" Margin="0,0,10,0" FontWeight="Bold">Preço:</TextBlock>
+                            <TextBox Text="{Binding Path=ModeloSelecionado.Preco,Mode=TwoWay}" Width="140"></TextBox>
+                        </StackPanel>
+                    </StackPanel>
+                    <StackPanel  Orientation="Horizontal" HorizontalAlignment="Right">
+                        <StackPanel Orientation="Horizontal">
+                            <Button x:Name="btnSalvar" Margin="0,0,30,0" Click="BtnSalvar_Click">Salvar</Button>
+                            <Button x:Name="btnDeletar" Margin="0,0,30,0" Click="BtnDeletar_Click" Background="Red" BorderBrush="Red">Deletar</Button>
+                            <Button x:Name="btnLimparModelo" Click="BtnLimparModelo_Click" BorderBrush="{x:Null}" Background="{x:Null}" Foreground="Red">Limpar</Button>
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+        </TabItem>
+        <TabItem Header="Clientes" x:Name="tabClientes">
+            <Grid Margin="0,10,0,0" VerticalAlignment="Top">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="500"></ColumnDefinition>
+                    <ColumnDefinition Width="20"></ColumnDefinition>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"></RowDefinition>
+                    <RowDefinition Height="20"></RowDefinition>
+                    <RowDefinition Height="400"></RowDefinition>
+                    <RowDefinition Height="auto"></RowDefinition>
+                    <RowDefinition Height="auto"></RowDefinition>
+                </Grid.RowDefinitions>
+                <TextBlock Foreground="DarkSlateGray" Grid.Column="0" Grid.Row="0" FontWeight="Bold">Compras</TextBlock>
+                <DataGrid x:Name="dataCompras" AutoGenerateColumns="False" IsReadOnly="True" Grid.Column="0" Grid.Row="2" ItemsSource="{Binding Path=ClienteSelecionado.Compras}" SelectedValue="{Binding CompraSelecionada}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="#" Binding="{Binding IdVenda}"/>
+                        <DataGridTextColumn Header="Modelo" Binding="{Binding NomeModeloPreCriacao}"/>
+                        <DataGridTextColumn Header="Tamanho" Binding="{Binding Tamanho}"/>
+                        <DataGridTextColumn Header="Quantidade" Binding="{Binding QtdItens}"/>
+                        <DataGridTextColumn Header="Preço" Binding="{Binding Preco}"/>
+                        <DataGridTextColumn Header="Total" Binding="{Binding Total}"/>
+                        <DataGridTemplateColumn Header="Opções">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button x:Name="btnRemover" Margin="0,0,0,0" Click="BtnRemover_Click" Background="Red" BorderBrush="Red">Remover</Button>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+                <TextBlock Foreground="DarkSlateGray" Grid.Column="2" Grid.Row="0" FontWeight="Bold" TextDecorations="{x:Null}">Cliente</TextBlock>
+                <StackPanel x:Name="DataNovaVenda" Orientation="Horizontal" Grid.Column="0" Grid.Row="3">
+                    <StackPanel Margin="0,0,30,16" Orientation="Vertical">
+                        <TextBlock Foreground="DarkSlateGray"  VerticalAlignment="Center" Margin="0,0,10,0" FontWeight="Bold">Modelo:</TextBlock>
+                        <ComboBox x:Name="cbxModelo" ItemsSource="{Binding Modelos}" SelectedValue="{Binding Path=ModeloSelecionado,Mode=TwoWay}"  Width="140"></ComboBox>
+                    </StackPanel>
+                    <StackPanel Margin="0,0,30,16" Orientation="Vertical">
+                        <TextBlock Foreground="DarkSlateGray"  VerticalAlignment="Center" Margin="0,0,10,0" FontWeight="Bold">Tamanho:</TextBlock>
+                        <ComboBox x:Name="cbxTamanho" ItemsSource="{Binding Path=ModeloSelecionado.Estoques}" SelectedValue="{Binding Path=EstoqueSelecionado}" HorizontalAlignment="Left" Width="80" SelectionChanged="CbxTamanho_SelectionChanged"></ComboBox>
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,16" Orientation="Vertical">
+                        <TextBlock Foreground="DarkSlateGray"  VerticalAlignment="Center" Margin="0,0,10,0" FontWeight="Bold">Quantidade:</TextBlock>
+                        <ComboBox x:Name="cbxQuantidade" ItemsSource="{Binding Path=QuantidadesDisponiveis}" SelectedValue="{Binding Path=QuantidadeSelecionada}"  HorizontalAlignment="Left" Width="80"></ComboBox>
+                    </StackPanel>
+                    <Button x:Name="btnAddVenda" Click="BtnAddVenda_Click">Adicionar</Button>
+                </StackPanel>
+                <StackPanel Grid.Column="2" Grid.Row="2">
+                    <StackPanel Margin="0,0,0,26" Orientation="Horizontal">
+                        <RadioButton x:Name="rbnPessoaFisica" Content="Pessoa Fisica"  IsChecked="{Binding IsPessoaFisica,Mode=TwoWay}" Foreground="DarkSlateGray" VerticalAlignment="Center" Margin="0,0,10,0" FontWeight="Bold" Checked="RbnPessoaFisica_Checked"></RadioButton>
+                        <RadioButton x:Name="rbnPessoaJuridica" Content="Pessoa Juridica" Foreground="DarkSlateGray" VerticalAlignment="Center" FontWeight="Bold" Checked="RbnPessoaJuridica_Checked"></RadioButton>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <StackPanel Margin="0,0,30,26" Orientation="Vertical">
+                            <TextBlock x:Name="txbCpfCnpj"  Foreground="DarkSlateGray" VerticalAlignment="Center" FontWeight="Bold"/>
+                            <TextBox x:Name="txtBuscaCpfCnpj" Text="{Binding CpfCnpjBusca,Mode=TwoWay,NotifyOnValidationError=True}" Width="140"/>
+                        </StackPanel>
+                        <StackPanel  Orientation="Horizontal">
+                            <Button x:Name="btnBuscarCliente"  Click="BtnBuscarCliente_Click">Buscar</Button>
+                        </StackPanel>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <StackPanel Margin="0,0,30,26" Orientation="Vertical">
+                            <TextBlock Foreground="DarkSlateGray" VerticalAlignment="Center" Margin="0,0,10,0" FontWeight="Bold">Nome:</TextBlock>
+                            <TextBox Text="{Binding Path=ClienteSelecionado.Nome,Mode=TwoWay,NotifyOnValidationError=True}" Width="200"/>
+                        </StackPanel>
+                        <StackPanel Margin="0,0,0,26" Orientation="Vertical">
+                            <TextBlock Foreground="DarkSlateGray" VerticalAlignment="Center" Margin="0,0,10,0" FontWeight="Bold">Data de Nascimento:</TextBlock>
+                            <DatePicker IsEnabled="{Binding IsPessoaFisica}" SelectedDate="{Binding Path=ClienteSelecionado.DataNascimento,Mode=TwoWay,NotifyOnValidationError=True}" Width="150"/>
+                        </StackPanel>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <StackPanel Margin="0,0,0,26" Orientation="Vertical">
+                            <TextBlock Foreground="DarkSlateGray" VerticalAlignment="Center" FontWeight="Bold">Razão Social:</TextBlock>
+                            <TextBox IsEnabled="{Binding IsPessoaJuridica}" Text="{Binding Path=ClienteSelecionado.RazaoSocial,Mode=TwoWay,NotifyOnValidationError=True}" Width="380"/>
+                        </StackPanel>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <StackPanel Margin="0,0,30,26" Orientation="Vertical">
+                            <TextBlock Foreground="DarkSlateGray" VerticalAlignment="Center" Margin="0,0,10,0" FontWeight="Bold">Rua:</TextBlock>
+                            <TextBox IsEnabled="{Binding IsPessoaJuridica}" Text="{Binding Path=ClienteSelecionado.Endereco.Rua,Mode=TwoWay,NotifyOnValidationError=True}" Width="286"/>
+                        </StackPanel>
+                        <StackPanel Margin="0,0,0,26" Orientation="Vertical">
+                            <TextBlock Foreground="DarkSlateGray" VerticalAlignment="Center" FontWeight="Bold">Numero:</TextBlock>
+                            <TextBox  IsEnabled="{Binding IsPessoaJuridica}" Text="{Binding Path=ClienteSelecionado.Endereco.Numero,Mode=TwoWay,NotifyOnValidationError=True}" HorizontalAlignment="Left" Width="64"/>
+                        </StackPanel>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <StackPanel Margin="0,0,30,26" Orientation="Vertical">
+                            <TextBlock Foreground="DarkSlateGray" VerticalAlignment="Center"  FontWeight="Bold">Estado:</TextBlock>
+                            <TextBox IsEnabled="{Binding IsPessoaJuridica}" Text="{Binding Path=ClienteSelecionado.Endereco.Estado,Mode=TwoWay,NotifyOnValidationError=True}" Width="110"/>
+                        </StackPanel>
+                        <StackPanel Margin="0,0,30,26" Orientation="Vertical">
+                            <TextBlock Foreground="DarkSlateGray" VerticalAlignment="Center"  FontWeight="Bold">Cidade:</TextBlock>
+                            <TextBox  IsEnabled="{Binding IsPessoaJuridica}" Text="{Binding Path=ClienteSelecionado.Endereco.Cidade,Mode=TwoWay,NotifyOnValidationError=True}" Width="110"/>
+                        </StackPanel>
+                        <StackPanel Margin="0,0,0,26" Orientation="Vertical">
+                            <TextBlock Foreground="DarkSlateGray" VerticalAlignment="Center"  FontWeight="Bold">Bairro:</TextBlock>
+                            <TextBox  IsEnabled="{Binding IsPessoaJuridica}" Text="{Binding Path=ClienteSelecionado.Endereco.Bairro,Mode=TwoWay,NotifyOnValidationError=True}" Width="104"/>
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+                <StackPanel  Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="2" Grid.Row="3">
+                    <StackPanel Orientation="Horizontal">
+                        <Button x:Name="btnSalvarCliente" Margin="0,0,30,0" Click="BtnSalvarCliente_Click">Salvar</Button>
+                        <Button x:Name="btnDeletarCliente" Margin="0,0,30,0" Click="BtnDeletarCliente_Click" Background="Red" BorderBrush="Red">Deletar</Button>
+                        <Button x:Name="btnLimparCliente" Click="BtnLimparCliente_Click" BorderBrush="{x:Null}" Background="{x:Null}" Foreground="Red">Limpar</Button>
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+        </TabItem>
+        <TabItem Header="Lista de Vendas" x:Name="tabListaVendas">
+            <Grid Margin="0,10,0,0" VerticalAlignment="Top">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="900"></ColumnDefinition>
+                    
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"></RowDefinition>
+                    <RowDefinition Height="20"></RowDefinition>
+                    <RowDefinition Height="460"></RowDefinition>
+                </Grid.RowDefinitions>
+                <TextBlock Foreground="DarkSlateGray" Grid.Column="0" Grid.Row="0" FontWeight="Bold">Vendas</TextBlock>
+                <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right">
+                    <Button x:Name="btnGerarXmlVendas"  Click="btnGerarXmlVendas_Click" Background="#FF198F4E" BorderBrush="#FF198F4E">Gerar Relatorio XML</Button>
+                </StackPanel>
+                <DataGrid x:Name="dataListaVendas" AutoGenerateColumns="False" IsReadOnly="True" Grid.Column="0" Grid.Row="2" ItemsSource="{Binding Vendas}" SelectedItem="{Binding VendaSelecionada}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="#" Binding="{Binding IdVenda}"/>
+                        <DataGridTextColumn Header="Modelo" Binding="{Binding Modelo}"/>
+                        <DataGridTextColumn Header="Tamanho" Binding="{Binding Tamanho}"/>
+                        <DataGridTextColumn Header="Quantidade" Binding="{Binding QtdItens}"/>
+                        <DataGridTextColumn Header="Preço" Binding="{Binding Preco}"/>
+                        <DataGridTextColumn Header="Total" Binding="{Binding Total}"/>
+                        <DataGridTextColumn Header="Cliente" Binding="{Binding Cliente}"/>
+                        <DataGridTextColumn Header="Data da Venda" Binding="{Binding DataVenda,StringFormat=dd/MM/yyyy}"/>
+                        <DataGridTextColumn Header="Hora da Venda" Binding="{Binding DataVenda,StringFormat=HH:mm:ss}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </TabItem>
+        <TabItem Header="Lista de Clientes" x:Name="tabListaClientes">
+            <Grid Margin="0,10,0,0" VerticalAlignment="Top">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="900"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"></RowDefinition>
+                    <RowDefinition Height="20"></RowDefinition>
+                    <RowDefinition Height="460"></RowDefinition>
+                </Grid.RowDefinitions>
+                <TextBlock Foreground="DarkSlateGray" Grid.Column="0" Grid.Row="0" FontWeight="Bold">Clientes</TextBlock>
+                <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right">
+                    <Button x:Name="btnGerarXmlClientes"  Click="btnGerarXmlClientes_Click" Background="#FF198F4E" BorderBrush="#FF198F4E">Gerar Relatorio XML</Button>
+                </StackPanel>
+                <DataGrid x:Name="dataListaClientes" AutoGenerateColumns="False" IsReadOnly="True" Grid.Column="0" Grid.Row="2" ItemsSource="{Binding Clientes}" SelectedItem="{Binding ClienteSelecionado}" >
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="#" Binding="{Binding IdPessoa}"/>
+                        <DataGridTextColumn Header="Nome" Binding="{Binding Nome}"/>
+                        <DataGridTextColumn Header="Cpf" Binding="{Binding Cpf}"/>
+                        <DataGridTextColumn Header="Data de Nascimento" Binding="{Binding DataNascimento,StringFormat=dd/MM/yyyy}"/>
+                        <DataGridTextColumn Header="Razão Social" Binding="{Binding RazaoSocial}"/>
+                        <DataGridTextColumn Header="Cnpj" Binding="{Binding Cnpj}"/>
+                        <DataGridTextColumn Header="Rua" Binding="{Binding Endereco.Rua}"/>
+                        <DataGridTextColumn Header="Numero" Binding="{Binding Endereco.Numero}"/>
+                        <DataGridTextColumn Header="Estado" Binding="{Binding Endereco.Estado}"/>
+                        <DataGridTextColumn Header="Cidade" Binding="{Binding Endereco.Cidade}"/>
+                        <DataGridTextColumn Header="Bairro" Binding="{Binding Endereco.Bairro}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </TabItem>
+    </TabControl>
+
+</Window>
