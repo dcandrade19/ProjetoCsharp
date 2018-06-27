@@ -224,7 +224,7 @@
                 </Grid.RowDefinitions>
                 <TextBlock Foreground="DarkSlateGray" Grid.Column="0" Grid.Row="0" FontWeight="Bold">Vendas</TextBlock>
                 <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right">
-                    <Button x:Name="btnGerarXmlVendas"  Click="btnGerarXmlVendas_Click" Background="#FF198F4E" BorderBrush="#FF198F4E">Gerar Relatorio XML</Button>
+                    <Button x:Name="btnGerarXmlVendas"  Click="BtnGerarXmlVendas_Click" Background="#FF198F4E" BorderBrush="#FF198F4E">Gerar Relatorio XML</Button>
                 </StackPanel>
                 <DataGrid x:Name="dataListaVendas" AutoGenerateColumns="False" IsReadOnly="True" Grid.Column="0" Grid.Row="2" ItemsSource="{Binding Vendas}" SelectedItem="{Binding VendaSelecionada}">
                     <DataGrid.Columns>
@@ -253,7 +253,7 @@
                 </Grid.RowDefinitions>
                 <TextBlock Foreground="DarkSlateGray" Grid.Column="0" Grid.Row="0" FontWeight="Bold">Clientes</TextBlock>
                 <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right">
-                    <Button x:Name="btnGerarXmlClientes"  Click="btnGerarXmlClientes_Click" Background="#FF198F4E" BorderBrush="#FF198F4E">Gerar Relatorio XML</Button>
+                    <Button x:Name="btnGerarXmlClientes"  Click="BtnGerarXmlClientes_Click" Background="#FF198F4E" BorderBrush="#FF198F4E">Gerar Relatorio XML</Button>
                 </StackPanel>
                 <DataGrid x:Name="dataListaClientes" AutoGenerateColumns="False" IsReadOnly="True" Grid.Column="0" Grid.Row="2" ItemsSource="{Binding Clientes}" SelectedItem="{Binding ClienteSelecionado}" >
                     <DataGrid.Columns>

@@ -1,4 +1,6 @@
-﻿using SistemaSapatos.ViewModel;
+﻿using ClosedXML.Excel;
+using Microsoft.Win32;
+using SistemaSapatos.ViewModel;
 using SistemaSapatosBase.Model;
 using System;
 using System.Collections.Generic;
@@ -260,14 +262,129 @@ namespace ProjetoRevenda2
 
         #endregion
 
-        private void btnGerarXmlVendas_Click(object sender, RoutedEventArgs e)
+        private void BtnGerarXmlVendas_Click(object sender, RoutedEventArgs e)
         {
+            var workbook = new XLWorkbook();
+            var worksheet = workbook.Worksheets.Add("Relatorio de Vendas");
+            int x = 3;
+            worksheet.Cell("A1").Value = "Relatorio de Vendas - Gerado em " + String.Format("{0:dd/MM/yyyy} as {0:HH:mm:ss}", DateTime.Now);
+            worksheet.Cell("A2").Value = "#";
+            worksheet.Cell("B2").Value = "Modelo";
+            worksheet.Cell("C2").Value = "Tamanho";
+            worksheet.Cell("D2").Value = "Quantidade";
+            worksheet.Cell("E2").Value = "Preço";
+            worksheet.Cell("F2").Value = "Total";
+            worksheet.Cell("G2").Value = "Cliente";
+            worksheet.Cell("H2").Value = "Data da Venda";
+            worksheet.Cell("I2").Value = "Hora da Venda";
+            foreach (Venda venda in VendaViewModel.Vendas)
+            {
+                worksheet.Cell("A" + x).Value = venda.IdVenda;
+                worksheet.Cell("B" + x).Value = venda.Modelo.Nome;
+                worksheet.Cell("C" + x).Value = venda.Tamanho;
+                worksheet.Cell("D" + x).Value = venda.QtdItens;
+                worksheet.Cell("E" + x).Value = String.Format("R$ {0}", venda.Preco);
+                worksheet.Cell("F" + x).Value = String.Format("R$ {0}", venda.Total);
+                worksheet.Cell("G" + x).Value = venda.Cliente;
+                worksheet.Cell("H" + x).Value = String.Format("{0:dd/MM/yyyy}", venda.DataVenda);
+                worksheet.Cell("I" + x).Value = String.Format("{0:HH:mm:ss}",venda.DataVenda);
+                x++;
+            }
+            var rngTable = worksheet.Range("A1:I"+(x-1));
+            rngTable.Cell(1, 1).Style.Font.Bold = true;
+            rngTable.Cell(1, 1).Style.Fill.BackgroundColor = XLColor.Gray;
+            rngTable.Cell(1, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+            rngTable.Row(1).Merge();
 
+            rngTable.Style.Border.OutsideBorder = XLBorderStyleValues.Thick;
+            rngTable.Style.Border.BottomBorder = XLBorderStyleValues.Thin;
+            var rngHeaders = rngTable.Range("A2:I2");
+            rngHeaders.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+            rngHeaders.Style.Font.Bold = true;
+            rngHeaders.Style.Fill.BackgroundColor = XLColor.LightGray;
+
+            worksheet.Columns(1, 9).AdjustToContents();
+
+           // workbook.SaveAs("BasicTable.xlsx");
+            var saveFileDialog = new SaveFileDialog
+            {
+                Filter = "Arquivos do Excel|*.xlsx",
+                Title = "Salvar arquivo do Excel"
+            };
+
+            saveFileDialog.ShowDialog();
+
+            if (!String.IsNullOrWhiteSpace(saveFileDialog.FileName))
+                workbook.SaveAs(saveFileDialog.FileName);
         }
 
-        private void btnGerarXmlClientes_Click(object sender, RoutedEventArgs e)
+        private void BtnGerarXmlClientes_Click(object sender, RoutedEventArgs e)
         {
+            var workbook = new XLWorkbook();
+            var worksheet = workbook.Worksheets.Add("Relatorio de Clientes");
+            int x = 3;
+            worksheet.Cell("A1").Value = "Relatorio de Clientes - Gerado em " + String.Format("{0:dd/MM/yyyy} as {0:HH:mm:ss}", DateTime.Now);
+            worksheet.Cell("A2").Value = "#";
+            worksheet.Cell("B2").Value = "Nome";
+            worksheet.Cell("C2").Value = "Cpf";
+            worksheet.Cell("D2").Value = "Data de Nascimento";
+            worksheet.Cell("E2").Value = "Razão Social";
+            worksheet.Cell("F2").Value = "Cnpj";
+            worksheet.Cell("G2").Value = "Rua";
+            worksheet.Cell("H2").Value = "Numero";
+            worksheet.Cell("I2").Value = "Estado";
+            worksheet.Cell("J2").Value = "Cidade";
+            worksheet.Cell("K2").Value = "Bairro";
+            foreach (Pessoa pessoa in PessoaViewModel.Clientes)
+            {
+                if(pessoa.GetType() == typeof(PessoaFisica))
+                {
+                    var pessoaf = (PessoaFisica)pessoa;
+                    worksheet.Cell("A" + x).Value = pessoaf.IdPessoa;
+                    worksheet.Cell("B" + x).Value = pessoaf.Nome;
+                    worksheet.Cell("C" + x).Value = pessoaf.Cpf;
+                    worksheet.Cell("D" + x).Value = String.Format("{0:dd/MM/yyyy}", pessoaf.DataNascimento);
+                }else
+                {
+                    var pessoaj = (PessoaJuridica)pessoa;
+                    worksheet.Cell("A" + x).Value = pessoaj.IdPessoa;
+                    worksheet.Cell("B" + x).Value = pessoaj.Nome;
+                    worksheet.Cell("E" + x).Value = pessoaj.RazaoSocial;
+                    worksheet.Cell("F" + x).Value = pessoaj.Cnpj;
+                    worksheet.Cell("G" + x).Value = pessoaj.Endereco.Rua;
+                    worksheet.Cell("H" + x).Value = pessoaj.Endereco.Numero;
+                    worksheet.Cell("I" + x).Value = pessoaj.Endereco.Estado;
+                    worksheet.Cell("J" + x).Value = pessoaj.Endereco.Cidade;
+                    worksheet.Cell("K" + x).Value = pessoaj.Endereco.Bairro;
+                }
+                x++;
+            }
+            var rngTable = worksheet.Range("A1:K" + (x - 1));
+            rngTable.Cell(1, 1).Style.Font.Bold = true;
+            rngTable.Cell(1, 1).Style.Fill.BackgroundColor = XLColor.Gray;
+            rngTable.Cell(1, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+            rngTable.Row(1).Merge();
 
+            rngTable.Style.Border.OutsideBorder = XLBorderStyleValues.Thick;
+            rngTable.Style.Border.BottomBorder = XLBorderStyleValues.Thin;
+            var rngHeaders = rngTable.Range("A2:K2");
+            rngHeaders.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+            rngHeaders.Style.Font.Bold = true;
+            rngHeaders.Style.Fill.BackgroundColor = XLColor.LightGray;
+
+            worksheet.Columns(1, 11).AdjustToContents();
+
+            // workbook.SaveAs("BasicTable.xlsx");
+            var saveFileDialog = new SaveFileDialog
+            {
+                Filter = "Arquivos do Excel|*.xlsx",
+                Title = "Salvar arquivo do Excel"
+            };
+
+            saveFileDialog.ShowDialog();
+
+            if (!String.IsNullOrWhiteSpace(saveFileDialog.FileName))
+                workbook.SaveAs(saveFileDialog.FileName);
         }
     }
 }

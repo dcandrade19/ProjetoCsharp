@@ -277,3 +277,12 @@ C:\Users\dcand\source\repos\ProjetoCsharp\SistemaSapatosBase\obj\Debug\SistemaSa
 C:\Users\dcand\source\repos\ProjetoCsharp\SistemaSapatosBase\obj\Debug\SistemaSapatosBase.csproj.CopyComplete
 C:\Users\dcand\source\repos\ProjetoCsharp\SistemaSapatosBase\obj\Debug\SistemaSapatos.Base.dll
 C:\Users\dcand\source\repos\ProjetoCsharp\SistemaSapatosBase\obj\Debug\SistemaSapatos.Base.pdb
+C:\Users\dcand\Source\Repos\ProjetoCsharp\SistemaSapatosBase\bin\Debug\ClosedXML.dll
+C:\Users\dcand\Source\Repos\ProjetoCsharp\SistemaSapatosBase\bin\Debug\DocumentFormat.OpenXml.dll
+C:\Users\dcand\Source\Repos\ProjetoCsharp\SistemaSapatosBase\bin\Debug\ExcelNumberFormat.dll
+C:\Users\dcand\Source\Repos\ProjetoCsharp\SistemaSapatosBase\bin\Debug\FastMember.Signed.dll
+C:\Users\dcand\Source\Repos\ProjetoCsharp\SistemaSapatosBase\bin\Debug\System.IO.FileSystem.Primitives.dll
+C:\Users\dcand\Source\Repos\ProjetoCsharp\SistemaSapatosBase\bin\Debug\System.IO.Packaging.dll
+C:\Users\dcand\Source\Repos\ProjetoCsharp\SistemaSapatosBase\bin\Debug\ClosedXML.xml
+C:\Users\dcand\Source\Repos\ProjetoCsharp\SistemaSapatosBase\bin\Debug\DocumentFormat.OpenXml.xml
+C:\Users\dcand\Source\Repos\ProjetoCsharp\SistemaSapatosBase\bin\Debug\ExcelNumberFormat.xml
