@@ -134,8 +134,8 @@ namespace ProjetoRevenda2
         }
         public void LimparModelo()
         {
-            dataModelos.SelectedItem = new Modelo();
             dataModelos.SelectedIndex = -1;
+            dataModelos.SelectedItem = new Modelo();     
         }
         #endregion
 
