@@ -262,6 +262,7 @@ namespace ProjetoRevenda2
 
         #endregion
 
+        // Relatorio de vendas
         private void BtnGerarXmlVendas_Click(object sender, RoutedEventArgs e)
         {
             var workbook = new XLWorkbook();
@@ -317,7 +318,7 @@ namespace ProjetoRevenda2
             if (!String.IsNullOrWhiteSpace(saveFileDialog.FileName))
                 workbook.SaveAs(saveFileDialog.FileName);
         }
-
+        //Relatorio de clientes
         private void BtnGerarXmlClientes_Click(object sender, RoutedEventArgs e)
         {
             var workbook = new XLWorkbook();
