@@ -5,6 +5,7 @@ using SistemaSapatosBase.Model;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -54,6 +55,7 @@ namespace ProjetoRevenda2
         private PessoaViewModel PessoaViewModel { get; set; }
         private VendaViewModel VendaViewModel { get; set; }
         #endregion
+        string pathRelatorios;
         public MainWindow()
         {
             InitializeComponent();
@@ -68,6 +70,13 @@ namespace ProjetoRevenda2
 
             tabListaVendas.DataContext = VendaViewModel;
             tabListaClientes.DataContext = PessoaViewModel;
+            pathRelatorios = AppDomain.CurrentDomain.BaseDirectory;
+            pathRelatorios += "Relatorios";
+            if (!Directory.Exists(pathRelatorios))
+            {
+                Directory.CreateDirectory(pathRelatorios);
+                return;
+            }
         }
 
         #region Tela Modelos // Metodos da tela de modelos
@@ -137,7 +146,7 @@ namespace ProjetoRevenda2
         public void LimparModelo()
         {
             dataModelos.SelectedIndex = -1;
-            dataModelos.SelectedItem = new Modelo();     
+            dataModelos.SelectedItem = new Modelo();
         }
         #endregion
 
@@ -195,7 +204,7 @@ namespace ProjetoRevenda2
 
         public void RemoverVenda()
         {
-            if(PessoaViewModel.CompraSelecionada.IdVenda == 0)
+            if (PessoaViewModel.CompraSelecionada.IdVenda == 0)
             {
                 foreach (Estoque estoque in PessoaViewModel.CompraSelecionada.Modelo.Estoques)
                 {
@@ -206,7 +215,7 @@ namespace ProjetoRevenda2
                 }
                 PessoaViewModel.ClienteSelecionado.Compras.Remove(PessoaViewModel.CompraSelecionada);
                 cbxQuantidade.Items.Refresh();
-            }    
+            }
         }
 
         public void RemoverVendasLotes()
@@ -265,7 +274,7 @@ namespace ProjetoRevenda2
         private void BtnBuscarCliente_Click(object sender, RoutedEventArgs e)
         {
             LimparCliente();
-            PessoaViewModel.BuscarClienteComando(); 
+            PessoaViewModel.BuscarClienteComando();
         }
 
         public void LimparCliente()
@@ -276,8 +285,18 @@ namespace ProjetoRevenda2
 
         #endregion
 
-        // Relatorio de vendas
+
         private void BtnGerarXmlVendas_Click(object sender, RoutedEventArgs e)
+        {
+            GerarXmlVendas();
+        }
+
+        private void BtnGerarXmlClientes_Click(object sender, RoutedEventArgs e)
+        {
+            GerarXmlClientes();
+        }
+        // Relatorio de vendas
+        public void GerarXmlVendas()
         {
             var workbook = new XLWorkbook();
             var worksheet = workbook.Worksheets.Add("Relatorio de Vendas");
@@ -302,10 +321,10 @@ namespace ProjetoRevenda2
                 worksheet.Cell("F" + x).Value = String.Format("R$ {0}", venda.Total);
                 worksheet.Cell("G" + x).Value = venda.Cliente;
                 worksheet.Cell("H" + x).Value = String.Format("{0:dd/MM/yyyy}", venda.DataVenda);
-                worksheet.Cell("I" + x).Value = String.Format("{0:HH:mm:ss}",venda.DataVenda);
+                worksheet.Cell("I" + x).Value = String.Format("{0:HH:mm:ss}", venda.DataVenda);
                 x++;
             }
-            var rngTable = worksheet.Range("A1:I"+(x-1));
+            var rngTable = worksheet.Range("A1:I" + (x - 1));
             rngTable.Cell(1, 1).Style.Font.Bold = true;
             rngTable.Cell(1, 1).Style.Fill.BackgroundColor = XLColor.Gray;
             rngTable.Cell(1, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
@@ -320,11 +339,13 @@ namespace ProjetoRevenda2
 
             worksheet.Columns(1, 9).AdjustToContents();
 
-           // workbook.SaveAs("BasicTable.xlsx");
+            // workbook.SaveAs("BasicTable.xlsx");
             var saveFileDialog = new SaveFileDialog
             {
                 Filter = "Arquivos do Excel|*.xlsx",
-                Title = "Salvar arquivo do Excel"
+                Title = "Salvar arquivo do Excel",
+                InitialDirectory = pathRelatorios,
+                FileName = "Relatorio_Vendas_" + String.Format("{0:ddMMyyyy}", DateTime.Now)
             };
 
             saveFileDialog.ShowDialog();
@@ -333,7 +354,7 @@ namespace ProjetoRevenda2
                 workbook.SaveAs(saveFileDialog.FileName);
         }
         //Relatorio de clientes
-        private void BtnGerarXmlClientes_Click(object sender, RoutedEventArgs e)
+        public void GerarXmlClientes()
         {
             var workbook = new XLWorkbook();
             var worksheet = workbook.Worksheets.Add("Relatorio de Clientes");
@@ -352,14 +373,15 @@ namespace ProjetoRevenda2
             worksheet.Cell("K2").Value = "Bairro";
             foreach (Pessoa pessoa in PessoaViewModel.Clientes)
             {
-                if(pessoa.GetType() == typeof(PessoaFisica))
+                if (pessoa.GetType() == typeof(PessoaFisica))
                 {
                     var pessoaf = (PessoaFisica)pessoa;
                     worksheet.Cell("A" + x).Value = pessoaf.IdPessoa;
                     worksheet.Cell("B" + x).Value = pessoaf.Nome;
                     worksheet.Cell("C" + x).Value = pessoaf.Cpf;
                     worksheet.Cell("D" + x).Value = String.Format("{0:dd/MM/yyyy}", pessoaf.DataNascimento);
-                }else
+                }
+                else
                 {
                     var pessoaj = (PessoaJuridica)pessoa;
                     worksheet.Cell("A" + x).Value = pessoaj.IdPessoa;
@@ -393,7 +415,9 @@ namespace ProjetoRevenda2
             var saveFileDialog = new SaveFileDialog
             {
                 Filter = "Arquivos do Excel|*.xlsx",
-                Title = "Salvar arquivo do Excel"
+                Title = "Salvar arquivo do Excel",
+                InitialDirectory = pathRelatorios,
+                FileName = "Relatorio_Clientes_" + String.Format("{0:ddMMyyyy}", DateTime.Now)
             };
 
             saveFileDialog.ShowDialog();

@@ -220,7 +220,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"></RowDefinition>
                     <RowDefinition Height="20"></RowDefinition>
-                    <RowDefinition Height="460"></RowDefinition>
+                    <RowDefinition Height="446"></RowDefinition>
                 </Grid.RowDefinitions>
                 <TextBlock Foreground="DarkSlateGray" Grid.Column="0" Grid.Row="0" FontWeight="Bold">Vendas</TextBlock>
                 <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right">
@@ -249,7 +249,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"></RowDefinition>
                     <RowDefinition Height="20"></RowDefinition>
-                    <RowDefinition Height="460"></RowDefinition>
+                    <RowDefinition Height="446"></RowDefinition>
                 </Grid.RowDefinitions>
                 <TextBlock Foreground="DarkSlateGray" Grid.Column="0" Grid.Row="0" FontWeight="Bold">Clientes</TextBlock>
                 <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right">
