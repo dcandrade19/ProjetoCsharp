@@ -205,7 +205,18 @@ namespace ProjetoRevenda2
                     }
                 }
                 PessoaViewModel.ClienteSelecionado.Compras.Remove(PessoaViewModel.CompraSelecionada);
+                cbxQuantidade.Items.Refresh();
             }    
+        }
+
+        public void RemoverVendasLotes()
+        {
+            var compras = PessoaViewModel.ClienteSelecionado.Compras.ToList();
+            foreach (Venda venda in compras)
+            {
+                PessoaViewModel.CompraSelecionada = venda;
+                RemoverVenda();
+            }
         }
 
         private void RbnPessoaFisica_Checked(object sender, RoutedEventArgs e)
@@ -241,7 +252,9 @@ namespace ProjetoRevenda2
 
         private void BtnDeletarCliente_Click(object sender, RoutedEventArgs e)
         {
+            RemoverVendasLotes();
             PessoaViewModel.DeletarComando();
+            LimparCliente();
         }
 
         private void BtnLimparCliente_Click(object sender, RoutedEventArgs e)
@@ -257,6 +270,7 @@ namespace ProjetoRevenda2
 
         public void LimparCliente()
         {
+            RemoverVendasLotes();
             PessoaViewModel.ClienteSelecionado = new PessoaFisica();
         }
 

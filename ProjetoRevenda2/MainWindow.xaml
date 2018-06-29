@@ -229,12 +229,12 @@
                 <DataGrid x:Name="dataListaVendas" AutoGenerateColumns="False" IsReadOnly="True" Grid.Column="0" Grid.Row="2" ItemsSource="{Binding Vendas}" SelectedItem="{Binding VendaSelecionada}">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="#" Binding="{Binding IdVenda}"/>
-                        <DataGridTextColumn Header="Modelo" Binding="{Binding Modelo}"/>
+                        <DataGridTextColumn Header="Modelo" Binding="{Binding Modelo.Nome}"/>
                         <DataGridTextColumn Header="Tamanho" Binding="{Binding Tamanho}"/>
                         <DataGridTextColumn Header="Quantidade" Binding="{Binding QtdItens}"/>
                         <DataGridTextColumn Header="Preço" Binding="{Binding Preco}"/>
                         <DataGridTextColumn Header="Total" Binding="{Binding Total}"/>
-                        <DataGridTextColumn Header="Cliente" Binding="{Binding Cliente}"/>
+                        <DataGridTextColumn Header="Cliente" Binding="{Binding Cliente.Nome}"/>
                         <DataGridTextColumn Header="Data da Venda" Binding="{Binding DataVenda,StringFormat=dd/MM/yyyy}"/>
                         <DataGridTextColumn Header="Hora da Venda" Binding="{Binding DataVenda,StringFormat=HH:mm:ss}"/>
                     </DataGrid.Columns>
