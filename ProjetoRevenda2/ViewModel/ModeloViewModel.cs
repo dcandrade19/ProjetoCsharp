@@ -27,7 +27,10 @@ namespace SistemaSapatos.ViewModel
 
         public ObservableCollection<int> QuantidadesDisponiveis { get; set; } = new ObservableCollection<int>();
 
-        //Metodo que carrega os modelos(sapatos) do banco, e salva em uma coleção Observable para carregar na grid.
+        /// <summary>
+        /// Metodo que carrega os modelos(sapatos) do banco, e salva
+        /// em uma coleção Observable para carregar na grid.
+        /// </summary>
         public ModeloViewModel()
         {
             modeloContexto = new ModeloContexto();
@@ -36,12 +39,14 @@ namespace SistemaSapatos.ViewModel
             Modelos = modeloContexto.Carregar();
         }
 
-        //Função que retorna mensagem se conseguiu ou não salvar o modelo no contexto.
+        /// <summary>
+        /// Função que retorna mensagem se conseguiu ou não salvar o modelo no contexto.
+        /// </summary>
         public void SalvarComando()
         {
             modeloContexto.Salvar(ModeloSelecionado);
         }
-
+        
         public void DeletarComando()
         {
             if(ModeloSelecionado.IdModelo > 0)

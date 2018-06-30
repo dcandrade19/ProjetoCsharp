@@ -81,13 +81,19 @@ namespace SistemaSapatosBase.Model
             get { return _vendas; }
             set { _vendas = value;Notificacao(); }
         }
-
+        /// <summary>
+        /// Atualiza o total de itens em estoque
+        /// </summary>
         public int TotalEstoque
         {
             get { return _totalEstoque = Total();}
             set { _totalEstoque = Total();Notificacao(); }
         }
-
+        /// <summary>
+        /// Realiza os calculos necessarios para definir a quantidade total
+        /// de estoque
+        /// </summary>
+        /// <returns></returns>
         public int Total()
         {
             int total = 0;

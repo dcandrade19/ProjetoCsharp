@@ -52,9 +52,12 @@ namespace ProjetoRevenda2
         private ModeloViewModel ModeloViewModel { get; set; }
         #endregion
         #region Tela Clientes // Variaveis da tela clientes
+        // ViewModel de Clientes
         private PessoaViewModel PessoaViewModel { get; set; }
+        // ViewModel de Vendas
         private VendaViewModel VendaViewModel { get; set; }
         #endregion
+        // Caminho para gerar o diretorio de relatorios
         string pathRelatorios;
         public MainWindow()
         {
@@ -80,28 +83,48 @@ namespace ProjetoRevenda2
         }
 
         #region Tela Modelos // Metodos da tela de modelos
+        /// <summary>
+        /// Chama o metodo responsavel para salvar o modelo
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnSalvar_Click(object sender, RoutedEventArgs e)
         {
             ModeloViewModel.SalvarComando();
             LimparModelo();
         }
-
+        /// <summary>
+        /// Chama o metodo responsavel para limpar o modelo
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnLimparModelo_Click(object sender, RoutedEventArgs e)
         {
             LimparModelo();
         }
-
+        /// <summary>
+        /// Chama o metodo responsavel por adicionar um item ao estoque
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnAddEstoque_Click(object sender, RoutedEventArgs e)
         {
             AdicionarEstoque();
         }
-
+        /// <summary>
+        /// Chama o metodo responsavel para deletar um modelo
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnDeletar_Click(object sender, RoutedEventArgs e)
         {
             ModeloViewModel.DeletarComando();
         }
 
-        // Inicializa as ComboBox com seus valores padrão
+        
+        /// <summary>
+        /// Inicializa os combobox da tela de modelos com seus valores padrão
+        /// </summary>
         private void IniciarComboBoxModelos()
         {
             int i = 0;
@@ -117,7 +140,10 @@ namespace ProjetoRevenda2
             cbxMateriais.ItemsSource = materiais;
             cbxCores.ItemsSource = cores;
         }
-        // Adiciona ou atualiza um item de estoque na tela de modelos
+
+        /// <summary>
+        /// Adiciona ou atualiza um item de estoque na tela de modelos
+        /// </summary>
         private void AdicionarEstoque()
         {
             bool atualizado = false;
@@ -143,6 +169,10 @@ namespace ProjetoRevenda2
                 }
             }
         }
+
+        /// <summary>
+        /// Limpa a tela de modelos setando um modelo vazio como atual
+        /// </summary>
         public void LimparModelo()
         {
             dataModelos.SelectedIndex = -1;
@@ -151,18 +181,33 @@ namespace ProjetoRevenda2
         #endregion
 
         #region Tela Clientes // Metodos da tela de clientes
+        /// <summary>
+        /// Chama o metodo responsavel para adicionar uma venda
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnAddVenda_Click(object sender, RoutedEventArgs e)
         {
             //modeloViewModel.PreVendaComando();
             AdicionarVenda();
             cbxModelo.SelectedIndex = -1;
         }
-
+        /// <summary>
+        /// Chama o metodo responsavel para calcular a quantidade de estoque disponivel
+        /// para o tamanho selecionado
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void CbxTamanho_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ModeloViewModel.CalcularQuantidadeDisponivel();
         }
-
+        /// <summary>
+        /// Chama o metodo responsavel para remover um item de venda e reseta
+        /// o combobox modelo
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnRemover_Click(object sender, RoutedEventArgs e)
         {
             //modeloViewModel.RemoverPreVendaComando();
@@ -170,6 +215,9 @@ namespace ProjetoRevenda2
             cbxModelo.SelectedIndex = -1;
         }
 
+        /// <summary>
+        /// Cria um objeto Venda e atualiza os estoques do modelo escolhido
+        /// </summary>
         private void AdicionarVenda()
         {
             bool atualizado = false;
@@ -201,7 +249,9 @@ namespace ProjetoRevenda2
             }
             ModeloViewModel.EstoqueSelecionado.Quantidade -= ModeloViewModel.QuantidadeSelecionada;
         }
-
+        /// <summary>
+        /// Remove uma venda da lista de compras do cliente e atualiza o estoque do modelo referente
+        /// </summary>
         public void RemoverVenda()
         {
             if (PessoaViewModel.CompraSelecionada.IdVenda == 0)
@@ -217,7 +267,9 @@ namespace ProjetoRevenda2
                 cbxQuantidade.Items.Refresh();
             }
         }
-
+        /// <summary>
+        /// Remove todas as vendas não finalizadas da lista de compras do cliente
+        /// </summary>
         public void RemoverVendasLotes()
         {
             var compras = PessoaViewModel.ClienteSelecionado.Compras.ToList();
@@ -227,7 +279,12 @@ namespace ProjetoRevenda2
                 RemoverVenda();
             }
         }
-
+        /// <summary>
+        /// Configura a exibição para informações de pessoa fisica
+        /// e chama o metodo DefinirTipo da view de clientes
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void RbnPessoaFisica_Checked(object sender, RoutedEventArgs e)
         {
             PessoaViewModel.CpfCnpjBusca = "";
@@ -235,7 +292,12 @@ namespace ProjetoRevenda2
             txbCpfCnpj.Text = "CPF:";
             PessoaViewModel.DefinirTipo();
         }
-
+        /// <summary>
+        /// Configura a exibição para informações de pessoa juridica
+        /// e chama o metodo DefinirTipo da view de clientes
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void RbnPessoaJuridica_Checked(object sender, RoutedEventArgs e)
         {
             PessoaViewModel.CpfCnpjBusca = "";
@@ -243,7 +305,12 @@ namespace ProjetoRevenda2
             txbCpfCnpj.Text = "CNPJ:";
             PessoaViewModel.DefinirTipo();
         }
-
+        /// <summary>
+        /// Chama os metodos responsaveis por salvar o cliente e
+        /// editar os modelos de cada venda deste cliente
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnSalvarCliente_Click(object sender, RoutedEventArgs e)
         {
             foreach (Venda venda in PessoaViewModel.ClienteSelecionado.Compras)
@@ -258,25 +325,42 @@ namespace ProjetoRevenda2
             VendaViewModel.CarregarComando();
             LimparCliente();
         }
-
+        /// <summary>
+        /// Chama os metodos responsaveis para deletar um cliente e todas
+        /// as vendas associadas a ele que ainda não foram finalizadas
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnDeletarCliente_Click(object sender, RoutedEventArgs e)
         {
             RemoverVendasLotes();
             PessoaViewModel.DeletarComando();
             LimparCliente();
         }
-
+        /// <summary>
+        /// Chama o metodo responsavel para limpar a tela de cliente
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnLimparCliente_Click(object sender, RoutedEventArgs e)
         {
             LimparCliente();
         }
-
+        /// <summary>
+        /// Chama o metodo de limpar a tela do cliente e em seguida
+        /// o metodo de busca de cliente
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnBuscarCliente_Click(object sender, RoutedEventArgs e)
         {
             LimparCliente();
             PessoaViewModel.BuscarClienteComando();
         }
-
+        /// <summary>
+        /// Limpa a tela de Clientes setando um cliente vazio como atual
+        /// e remove todas as vendas não finalizadas referentes
+        /// </summary>
         public void LimparCliente()
         {
             RemoverVendasLotes();
@@ -285,17 +369,27 @@ namespace ProjetoRevenda2
 
         #endregion
 
-
+        /// <summary>
+        /// Chama o metodo responsavel para gerar o relatorio de vendas
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnGerarXmlVendas_Click(object sender, RoutedEventArgs e)
         {
             GerarXmlVendas();
         }
-
+        /// <summary>
+        /// Chama o metodo responsavel para gerar o relatorio de clientes
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnGerarXmlClientes_Click(object sender, RoutedEventArgs e)
         {
             GerarXmlClientes();
         }
-        // Relatorio de vendas
+        /// <summary>
+        /// Gera um arquivo xml com todos os dados das vendas realizadas
+        /// </summary>
         public void GerarXmlVendas()
         {
             var workbook = new XLWorkbook();
@@ -305,26 +399,31 @@ namespace ProjetoRevenda2
             worksheet.Cell("A2").Value = "#";
             worksheet.Cell("B2").Value = "Modelo";
             worksheet.Cell("C2").Value = "Tamanho";
-            worksheet.Cell("D2").Value = "Quantidade";
-            worksheet.Cell("E2").Value = "Preço";
-            worksheet.Cell("F2").Value = "Total";
-            worksheet.Cell("G2").Value = "Cliente";
-            worksheet.Cell("H2").Value = "Data da Venda";
-            worksheet.Cell("I2").Value = "Hora da Venda";
+            worksheet.Cell("D2").Value = "Cliente";
+            worksheet.Cell("E2").Value = "Data da Venda";
+            worksheet.Cell("F2").Value = "Hora da Venda";
+            worksheet.Cell("G2").Value = "Preço(u)";
+            worksheet.Cell("H2").Value = "Quantidade";
+            worksheet.Cell("I2").Value = "Total";
             foreach (Venda venda in VendaViewModel.Vendas)
             {
                 worksheet.Cell("A" + x).Value = venda.IdVenda;
                 worksheet.Cell("B" + x).Value = venda.Modelo.Nome;
                 worksheet.Cell("C" + x).Value = venda.Tamanho;
-                worksheet.Cell("D" + x).Value = venda.QtdItens;
-                worksheet.Cell("E" + x).Value = String.Format("R$ {0}", venda.Preco);
-                worksheet.Cell("F" + x).Value = String.Format("R$ {0}", venda.Total);
-                worksheet.Cell("G" + x).Value = venda.Cliente;
-                worksheet.Cell("H" + x).Value = String.Format("{0:dd/MM/yyyy}", venda.DataVenda);
-                worksheet.Cell("I" + x).Value = String.Format("{0:HH:mm:ss}", venda.DataVenda);
+                worksheet.Cell("D" + x).Value = venda.Cliente;
+                worksheet.Cell("E" + x).Value = String.Format("{0:dd/MM/yyyy}", venda.DataVenda);
+                worksheet.Cell("F" + x).Value = String.Format("{0:HH:mm:ss}", venda.DataVenda);
+                worksheet.Cell("G" + x).Value = venda.Preco;
+                worksheet.Cell("H" + x).Value = venda.QtdItens;
+                worksheet.Cell("I" + x).Value = venda.Total;
                 x++;
             }
-            var rngTable = worksheet.Range("A1:I" + (x - 1));
+            worksheet.Cell("G" + x).Value = "Totais";
+            worksheet.Cell("H" + x).FormulaA1 = "SUM(H3:H" + (x - 1) + ")";
+            worksheet.Cell("I" + x).FormulaA1 = "SUM(I3:I" + (x - 1) + ")";
+            //worksheet.Cell("D" + x).Value = null;
+
+            var rngTable = worksheet.Range("A1:I" + (x));
             rngTable.Cell(1, 1).Style.Font.Bold = true;
             rngTable.Cell(1, 1).Style.Fill.BackgroundColor = XLColor.Gray;
             rngTable.Cell(1, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
@@ -336,6 +435,11 @@ namespace ProjetoRevenda2
             rngHeaders.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
             rngHeaders.Style.Font.Bold = true;
             rngHeaders.Style.Fill.BackgroundColor = XLColor.LightGray;
+
+            var rngFooter = rngTable.Range(string.Format("A{0}:I{0}", x));
+            rngFooter.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+            rngFooter.Style.Font.Bold = true;
+            rngFooter.Style.Fill.BackgroundColor = XLColor.LightGray;
 
             worksheet.Columns(1, 9).AdjustToContents();
 
@@ -353,7 +457,9 @@ namespace ProjetoRevenda2
             if (!String.IsNullOrWhiteSpace(saveFileDialog.FileName))
                 workbook.SaveAs(saveFileDialog.FileName);
         }
-        //Relatorio de clientes
+        /// <summary>
+        /// Gera um arquivo xml com todos os clientes cadastrados no banco
+        /// </summary>
         public void GerarXmlClientes()
         {
             var workbook = new XLWorkbook();

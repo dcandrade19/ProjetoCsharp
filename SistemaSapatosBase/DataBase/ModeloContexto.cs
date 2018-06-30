@@ -14,18 +14,21 @@ namespace SistemaSapatosBase.DataBase
     {
         private Contexto contexto;
 
-        //Criar um novo contexto(conexão com o banco).
+        /// <summary>
+        /// Criar um novo contexto(conexão com o banco).
+        /// </summary>
         public ModeloContexto()
         {
             contexto = new Contexto();
         }
 
         
-        /*
-         * Função que tenta salvar o modelo(sapato) no contexto(db), se id do modelo for maior que 0 ele edita o modelo
-         * se menor que 0 adiciona um novo modelo no contexto, e retorna o id do sapato salvo(editado ou novo).  
-         * Caso não consiga salvar/editar um modelo(sapato), retorna um erro do banco no console.
-         */
+        /// <summary>
+        /// Adiciona ou edita um modelo no banco e atualiza os estoques
+        /// referentes a ele
+        /// </summary>
+        /// <param name="modelo">Modelo a ser salvo</param>
+        /// <returns></returns>
         public int Salvar(Modelo modelo)
         { 
             int id;
@@ -44,13 +47,21 @@ namespace SistemaSapatosBase.DataBase
             mod.TotalEstoque = 0;
             return id;
         }
-
+        /// <summary>
+        /// Altera um modelo existente no banco
+        /// </summary>
+        /// <param name="modelo"></param>
+        /// <returns></returns>
         public int Editar(Modelo modelo)
         {
             Modelo modeloEditar = BuscarId(modelo.IdModelo);
             contexto.Entry(modeloEditar).CurrentValues.SetValues(modelo);
             return modeloEditar.IdModelo;
         }
+        /// <summary>
+        /// Atualiza ou adiciona itens de estoque no banco
+        /// </summary>
+        /// <param name="estoques"></param>
         public void EditarEstoques(ICollection<Estoque> estoques)
         {
             foreach (Estoque estoque in estoques)
@@ -60,20 +71,20 @@ namespace SistemaSapatosBase.DataBase
             }
             contexto.SaveChanges();
         }
-        /*
-         * Busca no db atraves do id do modelo(sapato), primeiro ele tenta carregar os modelos salvo em banco
-         * depois salva em uma coleção Observable e depois faz uma expressão lambda para para verificar se o id recebido
-         * consta na lista carregada, caso não consiga retorna null.
-         */
+        /// <summary>
+        /// Busca um modelo no banca de dados
+        /// </summary>
+        /// <param name="id"> Id do modelo a ser localizado</param>
+        /// <returns>Modelo encontrado ou Default</returns>
         public Modelo BuscarId(int id)
         {
             return contexto.Modelos.Include(m => m.Estoques).Where(x => x.IdModelo == id).SingleOrDefault();
         }
-        /*
-         * Deleta do db o modelo(sapato) recebido
-         * 
-         * 
-         */
+        /// <summary>
+        /// Deleta um modelo do banco de dados
+        /// </summary>
+        /// <param name="modelo">Modelo a ser deletado</param>
+        /// <returns>Id do modelo deletado</returns>
         public int Deletar(Modelo modelo)
         {
             int idDeletar = modelo.IdModelo;
@@ -83,7 +94,10 @@ namespace SistemaSapatosBase.DataBase
             return idDeletar;
         }
 
-        //função que carrega os modelos(sapatos) na grid.
+        /// <summary>
+        /// Carrega todos os modelos cadastrados em banco
+        /// </summary>
+        /// <returns>Lista de modelos</returns>
         public ObservableCollection<Modelo> Carregar()
         {
             contexto.Modelos
