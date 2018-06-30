@@ -18,6 +18,7 @@ namespace SistemaSapatosBase.Model
         private String _nome;
         private ObservableCollection<Venda> _compras = new ObservableCollection<Venda>();
 
+
         // Define o 'idPessoa' como chave primaria para tabela "pessoa"
         [Key]
         public int IdPessoa
@@ -25,11 +26,11 @@ namespace SistemaSapatosBase.Model
             get { return _idPessoa; }
             set { _idPessoa = value;Notificacao(); }
         }
-
+        [Required(ErrorMessage = "O nome do cliente é obrigatório", AllowEmptyStrings = false)]
         public String Nome
         {
             get { return _nome; }
-            set { _nome = value;Notificacao(); }
+            set { _nome = value;Notificacao(); ValidateModelProperty(value); }
         }
 
         public ObservableCollection<Venda> Compras

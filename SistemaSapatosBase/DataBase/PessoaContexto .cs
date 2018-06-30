@@ -27,7 +27,7 @@ namespace SistemaSapatosBase.DataBase
         public int Salvar(Pessoa pessoa)
         {
 
-            int id;
+            int id = 0;
             if (pessoa.IdPessoa > 0)
             {
                 id = Editar(pessoa);
@@ -75,11 +75,19 @@ namespace SistemaSapatosBase.DataBase
         /// <returns></returns>
         public int Deletar(Pessoa pessoa)
         {
-            int idDeletar = pessoa.IdPessoa;
-            Pessoa pessoaDeletar = BuscarId(idDeletar);
-            contexto.Clientes.Remove(pessoaDeletar);
-            contexto.SaveChanges();
-            return idDeletar;
+            try
+            {
+                int idDeletar = pessoa.IdPessoa;
+                Pessoa pessoaDeletar = BuscarId(idDeletar);
+                contexto.Clientes.Remove(pessoaDeletar);
+                contexto.SaveChanges();
+                return idDeletar;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return 0;
+            }      
         }
         /// <summary>
         /// Carrega todas as pessoas cadastradas em banco

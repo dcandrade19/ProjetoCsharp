@@ -27,41 +27,49 @@ namespace SistemaSapatosBase.Model
         private ICollection<Venda> _vendas;
         private int _totalEstoque;
 
+        public Modelo()
+        {
+            Preco = 0.00m;
+            Nome = string.Empty;
+            Material = "Couro";
+            Cor = "Preto";
+        }
+
         [Key]
         public int IdModelo
         {
             get { return _idModelo; }
             set { _idModelo = value;Notificacao(); }
         }
-       
+        [Required(ErrorMessage = "O nome do modelo é obrigatório", AllowEmptyStrings = false)]
         public string Nome
         {
             get { return _nome; }
-            set { _nome = value;Notificacao(); }
+            set { _nome = value;Notificacao(); ValidateModelProperty(value); }
         }
-
+        
         public bool Cardarco
         {
             get { return _cardarco; }
             set { _cardarco = value; Notificacao(); }
         }
-
+        
         public string Material
         {
             get { return _material; }
             set { _material = value; Notificacao(); }
         }
-
+        
         public string Cor
         {
             get { return _cor; }
             set { _cor = value; Notificacao(); }
         }
-
+        
         public decimal Preco
         {
             get { return _preco; }
-            set { _preco = value; Notificacao(); }
+            set { _preco = value; Notificacao(); ValidateModelProperty(value); }
         }
 
         public ICollection<ImagemProduto> Imagens
@@ -69,11 +77,11 @@ namespace SistemaSapatosBase.Model
             get { return _imagens; }
             set { _imagens = value; Notificacao(); }
         }
-
+        //[ValidarLista(ErrorMessage = "Adicione um ou mais itens de estoque a lista!")]
         public ObservableCollection<Estoque> Estoques
         {
             get { return _estoques; }
-            set { _estoques = value; Notificacao();}
+            set { _estoques = value; Notificacao(); ValidateModelProperty(value); }
         }
 
         public ICollection<Venda> Vendas

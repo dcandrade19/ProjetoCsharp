@@ -22,7 +22,7 @@ namespace SistemaSapatosBase.DataBase
             contexto = new Contexto();
         }
 
-        
+       
         /// <summary>
         /// Adiciona ou edita um modelo no banco e atualiza os estoques
         /// referentes a ele
@@ -31,7 +31,7 @@ namespace SistemaSapatosBase.DataBase
         /// <returns></returns>
         public int Salvar(Modelo modelo)
         { 
-            int id;
+            int id = 0;
             if(modelo.IdModelo > 0)
             {
                 id = Editar(modelo);
@@ -87,13 +87,25 @@ namespace SistemaSapatosBase.DataBase
         /// <returns>Id do modelo deletado</returns>
         public int Deletar(Modelo modelo)
         {
-            int idDeletar = modelo.IdModelo;
-            Modelo modeloDeletar = BuscarId(idDeletar);
-            contexto.Modelos.Remove(modeloDeletar);
-            contexto.SaveChanges();
-            return idDeletar;
+            try
+            {
+                int idDeletar = modelo.IdModelo;
+                Modelo modeloDeletar = BuscarId(idDeletar);
+                contexto.Modelos.Remove(modeloDeletar);
+                contexto.SaveChanges();
+                return idDeletar;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return 0;
+            }        
         }
 
+        public bool Testar()
+        {
+            return contexto.Database.Exists();
+        }
         /// <summary>
         /// Carrega todos os modelos cadastrados em banco
         /// </summary>

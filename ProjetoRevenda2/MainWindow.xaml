@@ -25,7 +25,7 @@
                     <RowDefinition Height="460"></RowDefinition>
                 </Grid.RowDefinitions>
                 <TextBlock Foreground="DarkSlateGray" Grid.Column="0" Grid.Row="0" FontWeight="Bold">Produtos</TextBlock>
-                <DataGrid x:Name="dataModelos" AutoGenerateColumns="False" IsReadOnly="True" Grid.Column="0" Grid.Row="2" ItemsSource="{Binding Modelos}" SelectedItem="{Binding ModeloSelecionado}" Margin="0,0,0,10">
+                <DataGrid x:Name="dataModelos"  AutoGenerateColumns="False" IsReadOnly="True" Grid.Column="0" Grid.Row="2" ItemsSource="{Binding Modelos}" SelectedItem="{Binding ModeloSelecionado}" Margin="0,0,0,10">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="#" Binding="{Binding IdModelo}"/>
                         <DataGridTextColumn Header="Modelo" Binding="{Binding Nome}"/>
@@ -45,7 +45,7 @@
                     <StackPanel Orientation="Horizontal">
                         <StackPanel Margin="0,0,30,16" Orientation="Vertical">
                             <TextBlock Foreground="DarkSlateGray"  VerticalAlignment="Center" Margin="0,0,10,0" FontWeight="Bold">Modelo:</TextBlock>
-                            <TextBox Text="{Binding Path=ModeloSelecionado.Nome,Mode=TwoWay,NotifyOnValidationError=True}" Width="140"/>
+                            <TextBox Text="{Binding Path=ModeloSelecionado.Nome,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}" Width="140"/>
                         </StackPanel>
                         <StackPanel Margin="0,0,0,16" Orientation="Horizontal">
                             <CheckBox Foreground="DarkSlateGray" IsChecked="{Binding Path=ModeloSelecionado.Cardarco,Mode=TwoWay}" VerticalAlignment="Center" Margin="0,0,10,0" FontWeight="Bold" Width="140">Cadarço</CheckBox>
@@ -63,7 +63,7 @@
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <StackPanel Margin="0,0,0,16" Orientation="Vertical">
-                            <TextBlock Foreground="DarkSlateGray"  VerticalAlignment="Center" Margin="0,0,10,0" FontWeight="Bold">Estoque:</TextBlock>
+                            <TextBlock Foreground="DarkSlateGray"  VerticalAlignment="Center" Margin="0,0,10,0" FontWeight="Bold" >Estoque:</TextBlock>
                             <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding Path=ModeloSelecionado.Estoques}" Height="155" Width="218">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Binding="{Binding Tamanho}" Header="Tamanho"/>
@@ -155,7 +155,7 @@
                     <StackPanel Orientation="Horizontal">
                         <StackPanel Margin="0,0,30,26" Orientation="Vertical">
                             <TextBlock x:Name="txbCpfCnpj"  Foreground="DarkSlateGray" VerticalAlignment="Center" FontWeight="Bold"/>
-                            <TextBox x:Name="txtBuscaCpfCnpj" Text="{Binding CpfCnpjBusca,Mode=TwoWay,NotifyOnValidationError=True}" Width="140"/>
+                            <TextBox x:Name="txtBuscaCpfCnpj" Text="{Binding CpfCnpjBusca,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}" Width="140"/>
                         </StackPanel>
                         <StackPanel  Orientation="Horizontal">
                             <Button x:Name="btnBuscarCliente"  Click="BtnBuscarCliente_Click">Buscar</Button>
@@ -164,7 +164,7 @@
                     <StackPanel Orientation="Horizontal">
                         <StackPanel Margin="0,0,30,26" Orientation="Vertical">
                             <TextBlock Foreground="DarkSlateGray" VerticalAlignment="Center" Margin="0,0,10,0" FontWeight="Bold">Nome:</TextBlock>
-                            <TextBox Text="{Binding Path=ClienteSelecionado.Nome,Mode=TwoWay,NotifyOnValidationError=True}" Width="200"/>
+                            <TextBox Text="{Binding Path=ClienteSelecionado.Nome,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}" Width="200"/>
                         </StackPanel>
                         <StackPanel Margin="0,0,0,26" Orientation="Vertical">
                             <TextBlock Foreground="DarkSlateGray" VerticalAlignment="Center" Margin="0,0,10,0" FontWeight="Bold">Data de Nascimento:</TextBlock>
@@ -174,7 +174,7 @@
                     <StackPanel Orientation="Horizontal">
                         <StackPanel Margin="0,0,0,26" Orientation="Vertical">
                             <TextBlock Foreground="DarkSlateGray" VerticalAlignment="Center" FontWeight="Bold">Razão Social:</TextBlock>
-                            <TextBox IsEnabled="{Binding IsPessoaJuridica}" Text="{Binding Path=ClienteSelecionado.RazaoSocial,Mode=TwoWay,NotifyOnValidationError=True}" Width="380"/>
+                            <TextBox IsEnabled="{Binding IsPessoaJuridica}" Text="{Binding Path=ClienteSelecionado.RazaoSocial,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}" Width="380"/>
                         </StackPanel>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
@@ -226,7 +226,7 @@
                 <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right">
                     <Button x:Name="btnGerarXmlVendas"  Click="BtnGerarXmlVendas_Click" Background="#FF198F4E" BorderBrush="#FF198F4E">Gerar Relatorio XML</Button>
                 </StackPanel>
-                <DataGrid x:Name="dataListaVendas" AutoGenerateColumns="False" IsReadOnly="True" Grid.Column="0" Grid.Row="2" ItemsSource="{Binding Vendas}" SelectedItem="{Binding VendaSelecionada}">
+                <DataGrid x:Name="dataListaVendas" AutoGenerateColumns="False" IsReadOnly="True" Grid.Column="0" Grid.Row="2" ItemsSource="{Binding Vendas}" SelectedItem="{Binding VendaSelecionada}" Margin="0,0,0,10">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="#" Binding="{Binding IdVenda}"/>
                         <DataGridTextColumn Header="Modelo" Binding="{Binding Modelo.Nome}"/>
@@ -255,7 +255,7 @@
                 <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right">
                     <Button x:Name="btnGerarXmlClientes"  Click="BtnGerarXmlClientes_Click" Background="#FF198F4E" BorderBrush="#FF198F4E">Gerar Relatorio XML</Button>
                 </StackPanel>
-                <DataGrid x:Name="dataListaClientes" AutoGenerateColumns="False" IsReadOnly="True" Grid.Column="0" Grid.Row="2" ItemsSource="{Binding Clientes}" SelectedItem="{Binding ClienteSelecionado}" >
+                <DataGrid x:Name="dataListaClientes" AutoGenerateColumns="False" IsReadOnly="True" Grid.Column="0" Grid.Row="2" ItemsSource="{Binding Clientes}" SelectedItem="{Binding ClienteSelecionado}" Margin="0,0,0,10" >
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="#" Binding="{Binding IdPessoa}"/>
                         <DataGridTextColumn Header="Nome" Binding="{Binding Nome}"/>

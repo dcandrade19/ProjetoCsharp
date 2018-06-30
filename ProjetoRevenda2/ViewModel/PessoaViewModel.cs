@@ -3,15 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
 using SistemaSapatosBase.Model;
 using SistemaSapatos.Base.Base;
+using System.Windows;
+using System.ComponentModel.DataAnnotations;
 
 namespace SistemaSapatos.ViewModel
 {
-    class PessoaViewModel : EntidadeBase
+    public class PessoaViewModel : EntidadeBase
     {
         private PessoaContexto pessoaContexto;
 
@@ -37,12 +36,13 @@ namespace SistemaSapatos.ViewModel
             set { _IsPessoaJuridica = value;  Notificacao(); }
         }
 
-        private string _cpfCnpjBusca;
+        private string _cpfCnpjBusca = string.Empty;
 
+        [Required(ErrorMessage = "Informe o Cpf/Cnpj do cliente!", AllowEmptyStrings = false)]
         public string CpfCnpjBusca
         {
             get { return _cpfCnpjBusca; }
-            set { _cpfCnpjBusca = value; Notificacao(); }
+            set { _cpfCnpjBusca = value; Notificacao(); ValidateModelProperty(value); }
         }
 
         private Pessoa _clienteSelecionado;
@@ -60,7 +60,7 @@ namespace SistemaSapatos.ViewModel
             Clientes = pessoaContexto.Carregar();
         }
 
-        public void SalvarComando()
+        public void SalvarComando(bool messageBoxOff = false)
         {
             ModeloViewModel modeloViewModel = new ModeloViewModel();
             foreach(Venda venda in ClienteSelecionado.Compras)
@@ -75,7 +75,41 @@ namespace SistemaSapatos.ViewModel
                 {
                     pessoaFisica.Cpf = CpfCnpjBusca;
                 }
-                pessoaContexto.Salvar(pessoaFisica);
+                if (!pessoaFisica.HasErrors)
+                {
+                    var compras = from c in pessoaFisica.Compras
+                                  where c.IdVenda == 0
+                                  select c;
+                    List<Venda> listacompras = compras.ToList();
+                    if (!messageBoxOff)
+                    {
+                        var id = pessoaContexto.Salvar(pessoaFisica);
+                        if (id > 0)
+                        {
+                            MessageBox.Show("O cliente ID: " + id + " foi salvo com sucesso.",
+                            ("Cliente salvo!"), MessageBoxButton.OK, MessageBoxImage.Asterisk);
+                            if (listacompras.Count > 0)
+                            {
+                                MessageBox.Show("Foram registradas: " + listacompras.Count + " vendas.",
+                            ("Vendas registradas!"), MessageBoxButton.OK, MessageBoxImage.Asterisk);
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show("Ocorreu um erro ao tentar salvar o cliente.",
+                            "Não foi possivel salvar o cliente!", MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
+                    } else
+                    {
+                        pessoaContexto.Salvar(pessoaFisica);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Verifique se todos os campos foram preenchidos corretamente.",
+                        "Não foi possivel salvar o cliente!", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+
             } else
             {
                 PessoaJuridica pessoaJuridica = new PessoaJuridica();
@@ -84,7 +118,41 @@ namespace SistemaSapatos.ViewModel
                 {
                     pessoaJuridica.Cnpj = CpfCnpjBusca;
                 }
-                pessoaContexto.Salvar(pessoaJuridica);
+                if (!pessoaJuridica.HasErrors)
+                {
+                    var compras = from c in pessoaJuridica.Compras
+                                  where c.IdVenda == 0
+                                  select c;
+                    List<Venda> listacompras = compras.ToList();
+                    if (!messageBoxOff)
+                    {
+                        var id = pessoaContexto.Salvar(pessoaJuridica);
+                        if (id > 0)
+                        {
+                            MessageBox.Show("O cliente ID: " + id + " foi salvo com sucesso.",
+                            ("Cliente salvo!"), MessageBoxButton.OK, MessageBoxImage.Asterisk);
+                            if (listacompras.Count > 0)
+                            {
+                                MessageBox.Show("Foram registradas: " + listacompras.Count + " vendas.",
+                            ("Vendas registradas!"), MessageBoxButton.OK, MessageBoxImage.Asterisk);
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show("Ocorreu um erro ao tentar salvar o cliente.",
+                            "Não foi possivel salvar o cliente!", MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
+                    } else
+                    {
+                        pessoaContexto.Salvar(pessoaJuridica);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Verifique se todos os campos foram preenchidos corretamente.",
+                        "Não foi possivel salvar o cliente!", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+
             }
         }
 
@@ -92,8 +160,23 @@ namespace SistemaSapatos.ViewModel
         {
             if (ClienteSelecionado.IdPessoa > 0)
             {
-                pessoaContexto.Deletar(ClienteSelecionado);
+                var id = pessoaContexto.Deletar(ClienteSelecionado);
+                if (id > 0)
+                {
+                    MessageBox.Show("O cliente ID: " + id + " foi deletado com sucesso.",
+                    ("Cliente deletado!"), MessageBoxButton.OK, MessageBoxImage.Asterisk);
+                }
+                else
+                {
+                    MessageBox.Show("Ocorreu um erro ao tentar deletar o cliente.",
+                    "Não foi possivel deletar o cliente!", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
+        }
+
+        public void CarregarComando()
+        {
+            pessoaContexto.Carregar();
         }
 
         public Pessoa BuscarComando(int id)

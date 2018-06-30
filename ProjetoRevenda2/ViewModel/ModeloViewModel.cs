@@ -1,15 +1,13 @@
-﻿using SistemaSapatos.Base.Base;
-using SistemaSapatosBase.DataBase;
+﻿using SistemaSapatosBase.DataBase;
 using SistemaSapatosBase.Model;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Windows;
 
 namespace SistemaSapatos.ViewModel
 {
-    class ModeloViewModel
+    public class ModeloViewModel
     {
         private ModeloContexto modeloContexto;
 
@@ -39,20 +37,66 @@ namespace SistemaSapatos.ViewModel
             Modelos = modeloContexto.Carregar();
         }
 
+        public void CarregarComando()
+        {
+            modeloContexto.Carregar();
+        }
         /// <summary>
         /// Função que retorna mensagem se conseguiu ou não salvar o modelo no contexto.
         /// </summary>
-        public void SalvarComando()
+        public void SalvarComando(bool messageBoxOff = false)
         {
-            modeloContexto.Salvar(ModeloSelecionado);
+            if(!messageBoxOff)
+            {
+                if (!ModeloSelecionado.HasErrors)
+                {
+                    var id = modeloContexto.Salvar(ModeloSelecionado);
+                    if (id > 0)
+                    {
+                        MessageBox.Show("O modelo ID: " + id + " foi salvo com sucesso.",
+                        ("Modelo salvo!"), MessageBoxButton.OK, MessageBoxImage.Asterisk);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Ocorreu um erro ao tentar salvar o modelo.",
+                        "Não foi possivel salvar o modelo!", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Verifique se todos os campos foram preenchidos corretamente.",
+                        "Não foi possivel salvar o modelo!", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }else
+            {
+                modeloContexto.Salvar(ModeloSelecionado);
+            }          
         }
         
-        public void DeletarComando()
+        public void DeletarComando(bool messageBoxOff = false)
         {
-            if(ModeloSelecionado.IdModelo > 0)
+            if (!messageBoxOff)
+            {
+                if (ModeloSelecionado.IdModelo > 0)
+                {
+
+                    var id = modeloContexto.Deletar(ModeloSelecionado);
+                    if (id > 0)
+                    {
+                        MessageBox.Show("O modelo ID: " + id + " foi deletado com sucesso.",
+                        ("Modelo deletado!"), MessageBoxButton.OK, MessageBoxImage.Asterisk);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Ocorreu um erro ao tentar deletar o modelo.",
+                        "Não foi possivel deletar o modelo!", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+            } else
             {
                 modeloContexto.Deletar(ModeloSelecionado);
-            }   
+            }
+        
         }
 
         public void EditarEstoquesComando(IList<Estoque> estoques)
@@ -63,6 +107,11 @@ namespace SistemaSapatos.ViewModel
         public Modelo BuscarComando(int id)
         {
             return modeloContexto.BuscarId(id);
+        }
+
+        public bool TestarComando()
+        {
+            return modeloContexto.Testar();
         }
 
         public void CalcularQuantidadeDisponivel()

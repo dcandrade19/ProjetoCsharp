@@ -4,20 +4,10 @@ using SistemaSapatos.ViewModel;
 using SistemaSapatosBase.Model;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace ProjetoRevenda2
 {
@@ -57,6 +47,7 @@ namespace ProjetoRevenda2
         // ViewModel de Vendas
         private VendaViewModel VendaViewModel { get; set; }
         #endregion
+
         // Caminho para gerar o diretorio de relatorios
         string pathRelatorios;
         public MainWindow()
@@ -118,10 +109,35 @@ namespace ProjetoRevenda2
         /// <param name="e"></param>
         private void BtnDeletar_Click(object sender, RoutedEventArgs e)
         {
-            ModeloViewModel.DeletarComando();
+            if (dataModelos.SelectedItems.Count > 1)
+            {
+                IList<Modelo> listaDeletar = new List<Modelo>();
+                foreach(Modelo modelo in dataModelos.SelectedItems)
+                {
+                    listaDeletar.Add(modelo);
+                }
+                if (MessageBox.Show("Deseja deletar os "+listaDeletar.Count+" modelos selecionados?", "Confirmar deletar.", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                {
+                    foreach(Modelo modelo in listaDeletar)
+                    {
+                        ModeloViewModel.ModeloSelecionado = modelo;
+                        ModeloViewModel.DeletarComando(true);
+                    }     
+                }
+            } else
+            {
+                if (ModeloViewModel.ModeloSelecionado.IdModelo > 0)
+                {
+                    if (MessageBox.Show("Deseja deletar este modelo?", "Confirmar deletar.", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                    {
+                        ModeloViewModel.DeletarComando();
+                    }
+                }
+            }
+            LimparModelo();
         }
 
-        
+
         /// <summary>
         /// Inicializa os combobox da tela de modelos com seus valores padrão
         /// </summary>
@@ -210,9 +226,11 @@ namespace ProjetoRevenda2
         /// <param name="e"></param>
         private void BtnRemover_Click(object sender, RoutedEventArgs e)
         {
-            //modeloViewModel.RemoverPreVendaComando();
-            RemoverVenda();
-            cbxModelo.SelectedIndex = -1;
+            if (MessageBox.Show("Deseja remover este item?", "Confirmar remover.", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            {
+                RemoverVenda();
+                cbxModelo.SelectedIndex = -1;
+            }
         }
 
         /// <summary>
@@ -272,11 +290,14 @@ namespace ProjetoRevenda2
         /// </summary>
         public void RemoverVendasLotes()
         {
-            var compras = PessoaViewModel.ClienteSelecionado.Compras.ToList();
-            foreach (Venda venda in compras)
+            if (PessoaViewModel.ClienteSelecionado != null)
             {
-                PessoaViewModel.CompraSelecionada = venda;
-                RemoverVenda();
+                var compras = PessoaViewModel.ClienteSelecionado.Compras.ToList();
+                foreach (Venda venda in compras)
+                {
+                    PessoaViewModel.CompraSelecionada = venda;
+                    RemoverVenda();
+                }
             }
         }
         /// <summary>
@@ -318,7 +339,7 @@ namespace ProjetoRevenda2
                 if (venda.IdVenda == 0)
                 {
                     ModeloViewModel.ModeloSelecionado = venda.Modelo;
-                    ModeloViewModel.SalvarComando();
+                    ModeloViewModel.SalvarComando(true);
                 }
             }
             PessoaViewModel.SalvarComando();
@@ -333,9 +354,15 @@ namespace ProjetoRevenda2
         /// <param name="e"></param>
         private void BtnDeletarCliente_Click(object sender, RoutedEventArgs e)
         {
-            RemoverVendasLotes();
-            PessoaViewModel.DeletarComando();
-            LimparCliente();
+            if (PessoaViewModel.ClienteSelecionado.IdPessoa > 0)
+            {
+                if (MessageBox.Show("Deseja deletar este cliente?", "Confirmar deletar.", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                {
+                    RemoverVendasLotes();
+                    PessoaViewModel.DeletarComando();
+                    LimparCliente();
+                }
+            }
         }
         /// <summary>
         /// Chama o metodo responsavel para limpar a tela de cliente
