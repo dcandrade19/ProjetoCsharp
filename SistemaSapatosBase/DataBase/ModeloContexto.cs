@@ -102,10 +102,6 @@ namespace SistemaSapatosBase.DataBase
             }        
         }
 
-        public bool Testar()
-        {
-            return contexto.Database.Exists();
-        }
         /// <summary>
         /// Carrega todos os modelos cadastrados em banco
         /// </summary>

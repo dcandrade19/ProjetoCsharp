@@ -109,11 +109,6 @@ namespace SistemaSapatos.ViewModel
             return modeloContexto.BuscarId(id);
         }
 
-        public bool TestarComando()
-        {
-            return modeloContexto.Testar();
-        }
-
         public void CalcularQuantidadeDisponivel()
         {
             QuantidadesDisponiveis.Clear();
