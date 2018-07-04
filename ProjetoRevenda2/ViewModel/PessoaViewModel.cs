@@ -31,6 +31,14 @@ namespace SistemaSapatos.ViewModel
         /// </summary>
         public Venda CompraSelecionada { get; set; }
 
+        private string _msgResultadoBusca;
+
+        public string MsgResultadoBusca
+        {
+            get { return _msgResultadoBusca; }
+            set { _msgResultadoBusca = value; Notificacao(); }
+        }
+
         private string _strBusca = string.Empty;
         /// <summary>
         /// Representa o valor a ser localizado em buscas
@@ -38,7 +46,7 @@ namespace SistemaSapatos.ViewModel
         public string StrBusca
         {
             get { return _strBusca; }
-            set { _strBusca = value; Notificacao(); BuscarVenda(value); }
+            set { _strBusca = value; Notificacao(); BuscarCliente(value); }
         }
 
         private bool _isPessoaFisica = true;
@@ -265,10 +273,11 @@ namespace SistemaSapatos.ViewModel
                 if (Encontrado != null)
                 {
                     ClienteSelecionado = Encontrado;
+                    
                 }
                 else
                 {
-
+                    MessageBox.Show("Não foi localizado o cliente com o CPF : " + CpfCnpjBusca, "Cliente não encontrado", MessageBoxButton.OK,MessageBoxImage.Information);
                     ClienteSelecionado = new PessoaFisica()
                     {
                         Cpf = CpfCnpjBusca
@@ -292,6 +301,7 @@ namespace SistemaSapatos.ViewModel
                 }
                 else
                 {
+                    MessageBox.Show("Não foi localizado o cliente com o CNPJ : " + CpfCnpjBusca, "Cliente não encontrado", MessageBoxButton.OK, MessageBoxImage.Information);
                     ClienteSelecionado = new PessoaJuridica()
                     {
                         Cnpj = CpfCnpjBusca
@@ -300,10 +310,10 @@ namespace SistemaSapatos.ViewModel
             }
         }
         /// <summary>
-        /// Busca os itens de venda cadastrados
+        /// Busca os clientes cadastrados
         /// </summary>
-        /// <param name="strBuscar">Valor a ser localizado dentre as vendas</param>
-        public void BuscarVenda(string strBuscar)
+        /// <param name="strBuscar">Valor a ser localizado dentre os clientes</param>
+        public void BuscarCliente(string strBuscar)
         {
             if (!string.IsNullOrEmpty(strBuscar))
             {
@@ -317,11 +327,23 @@ namespace SistemaSapatos.ViewModel
             a.EnderecoAb.Cidade.Contains(strBuscar) ||
             a.EnderecoAb.Bairro.Contains(strBuscar) ||
             a.EnderecoAb.Numero.ToString().Contains(StrBusca)));
-                Clientes = resultadoBusca;
+                if (resultadoBusca.Count > 0)
+                {
+
+                    MsgResultadoBusca = string.Format("Foram localizados {0} clientes!", resultadoBusca.Count);
+                    Clientes = resultadoBusca;
+                }
+                else
+                {           
+                    MsgResultadoBusca = "A busca não retornou nenhum resultado!";
+                    Clientes = pessoaContexto.Carregar();
+                }
+                //Clientes = resultadoBusca;
             }
             else
             {
                 Clientes = pessoaContexto.Carregar();
+                MsgResultadoBusca = string.Empty;
             }
         }
     }

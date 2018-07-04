@@ -28,6 +28,14 @@ namespace SistemaSapatos.ViewModel
 
         public String Mensagem { get; set; }
 
+        private string _msgResultadoBusca;
+
+        public string MsgResultadoBusca
+        {
+            get { return _msgResultadoBusca; }
+            set { _msgResultadoBusca = value;Notificacao(); }
+        }
+
         public Venda VendaSelecionada { get; set; }
 
         private string _strBusca = string.Empty;
@@ -63,13 +71,19 @@ namespace SistemaSapatos.ViewModel
 
             return vendaContexto.BuscarId(id);
         }
-
+        /// <summary>
+        /// Chama o metodo do contexto para carregar as vendas
+        /// </summary>
         public void CarregarComando()
         {
 
             vendaContexto.Carregar();
         }
-
+       
+        /// <summary>
+        /// Busca os itens de venda cadastrados
+        /// </summary>
+        /// <param name="strBuscar">Valor a ser localizado dentre as vendas</param>
         public void BuscarVenda(string strBuscar)
         {
             if (!string.IsNullOrEmpty(strBuscar))
@@ -80,11 +94,23 @@ namespace SistemaSapatos.ViewModel
             a.Preco.ToString().Contains(strBuscar) ||
             a.Total.ToString().Contains(strBuscar) ||
             a.DataVenda.ToString().Contains(strBuscar)));
-                Vendas = resultadoBusca;
+                if (resultadoBusca.Count > 0)
+                {
+                    
+                    MsgResultadoBusca = string.Format("Foram localizadas {0} vendas!",resultadoBusca.Count);
+                    Vendas = resultadoBusca;
+                }
+                else
+                {            
+                    MsgResultadoBusca = "A busca não retornou nenhum resultado!";
+                    Vendas = vendaContexto.Carregar();
+                }
+                // Vendas = resultadoBusca;
             }
             else
             {
                 Vendas = vendaContexto.Carregar();
+                MsgResultadoBusca = string.Empty;  
             }
         }
     }
