@@ -31,6 +31,14 @@ namespace SistemaSapatos.ViewModel
         /// </summary>
         public Venda CompraSelecionada { get; set; }
 
+        private string _msgResultadoBusca;
+
+        public string MsgResultadoBusca
+        {
+            get { return _msgResultadoBusca; }
+            set { _msgResultadoBusca = value; Notificacao(); }
+        }
+
         private string _strBusca = string.Empty;
         /// <summary>
         /// Representa o valor a ser localizado em buscas
@@ -317,12 +325,23 @@ namespace SistemaSapatos.ViewModel
             a.EnderecoAb.Cidade.Contains(strBuscar) ||
             a.EnderecoAb.Bairro.Contains(strBuscar) ||
             a.EnderecoAb.Numero.ToString().Contains(StrBusca)));
-                Clientes = resultadoBusca.Count > 0 ? resultadoBusca : pessoaContexto.Carregar();
+                if (resultadoBusca.Count > 0)
+                {
+
+                    MsgResultadoBusca = string.Format("Foram localizados {0} clientes!", resultadoBusca.Count);
+                    Clientes = resultadoBusca;
+                }
+                else
+                {           
+                    MsgResultadoBusca = "A busca não retornou nenhum resultado!";
+                    Clientes = pessoaContexto.Carregar();
+                }
                 //Clientes = resultadoBusca;
             }
             else
             {
                 Clientes = pessoaContexto.Carregar();
+                MsgResultadoBusca = string.Empty;
             }
         }
     }
