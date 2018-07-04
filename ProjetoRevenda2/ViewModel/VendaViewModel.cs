@@ -63,13 +63,19 @@ namespace SistemaSapatos.ViewModel
 
             return vendaContexto.BuscarId(id);
         }
-
+        /// <summary>
+        /// Chama o metodo do contexto para carregar as vendas
+        /// </summary>
         public void CarregarComando()
         {
 
             vendaContexto.Carregar();
         }
-
+       
+        /// <summary>
+        /// Busca os itens de venda cadastrados
+        /// </summary>
+        /// <param name="strBuscar">Valor a ser localizado dentre as vendas</param>
         public void BuscarVenda(string strBuscar)
         {
             if (!string.IsNullOrEmpty(strBuscar))
@@ -80,7 +86,8 @@ namespace SistemaSapatos.ViewModel
             a.Preco.ToString().Contains(strBuscar) ||
             a.Total.ToString().Contains(strBuscar) ||
             a.DataVenda.ToString().Contains(strBuscar)));
-                Vendas = resultadoBusca;
+                Vendas = resultadoBusca.Count > 0 ? resultadoBusca : vendaContexto.Carregar();
+                // Vendas = resultadoBusca;
             }
             else
             {

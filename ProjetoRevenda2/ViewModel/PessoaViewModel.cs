@@ -38,7 +38,7 @@ namespace SistemaSapatos.ViewModel
         public string StrBusca
         {
             get { return _strBusca; }
-            set { _strBusca = value; Notificacao(); BuscarVenda(value); }
+            set { _strBusca = value; Notificacao(); BuscarCliente(value); }
         }
 
         private bool _isPessoaFisica = true;
@@ -300,10 +300,10 @@ namespace SistemaSapatos.ViewModel
             }
         }
         /// <summary>
-        /// Busca os itens de venda cadastrados
+        /// Busca os clientes cadastrados
         /// </summary>
-        /// <param name="strBuscar">Valor a ser localizado dentre as vendas</param>
-        public void BuscarVenda(string strBuscar)
+        /// <param name="strBuscar">Valor a ser localizado dentre os clientes</param>
+        public void BuscarCliente(string strBuscar)
         {
             if (!string.IsNullOrEmpty(strBuscar))
             {
@@ -317,7 +317,8 @@ namespace SistemaSapatos.ViewModel
             a.EnderecoAb.Cidade.Contains(strBuscar) ||
             a.EnderecoAb.Bairro.Contains(strBuscar) ||
             a.EnderecoAb.Numero.ToString().Contains(StrBusca)));
-                Clientes = resultadoBusca;
+                Clientes = resultadoBusca.Count > 0 ? resultadoBusca : pessoaContexto.Carregar();
+                //Clientes = resultadoBusca;
             }
             else
             {
