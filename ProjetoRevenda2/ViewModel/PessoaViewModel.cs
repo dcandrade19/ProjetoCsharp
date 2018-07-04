@@ -265,10 +265,11 @@ namespace SistemaSapatos.ViewModel
                 if (Encontrado != null)
                 {
                     ClienteSelecionado = Encontrado;
+                    
                 }
                 else
                 {
-
+                    MessageBox.Show("Não foi localizado o cliente com o CPF : " + CpfCnpjBusca, "Cliente não encontrado", MessageBoxButton.OK,MessageBoxImage.Information);
                     ClienteSelecionado = new PessoaFisica()
                     {
                         Cpf = CpfCnpjBusca
@@ -292,6 +293,7 @@ namespace SistemaSapatos.ViewModel
                 }
                 else
                 {
+                    MessageBox.Show("Não foi localizado o cliente com o CNPJ : " + CpfCnpjBusca, "Cliente não encontrado", MessageBoxButton.OK, MessageBoxImage.Information);
                     ClienteSelecionado = new PessoaJuridica()
                     {
                         Cnpj = CpfCnpjBusca
