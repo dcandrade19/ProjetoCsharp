@@ -10,6 +10,9 @@ using System.Windows;
 
 namespace SistemaSapatos.Base.Base
 {
+    /// <summary>
+    /// Classe de base para as entidades e algumas viewmodels
+    /// </summary>
     public class EntidadeBase : INotifyPropertyChanged,  INotifyDataErrorInfo
     {
         public event PropertyChangedEventHandler PropertyChanged;
@@ -45,8 +48,7 @@ namespace SistemaSapatos.Base.Base
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
         private void RaiseErrorsChanged(string propertyName)
         {
-            if (ErrorsChanged != null)
-                ErrorsChanged(this, new DataErrorsChangedEventArgs(propertyName));
+            ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
         }
 
         public System.Collections.IEnumerable GetErrors(string propertyName)

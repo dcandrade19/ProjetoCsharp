@@ -7,24 +7,42 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using SistemaSapatosBase.Model;
+using SistemaSapatos.Base.Base;
 
 namespace SistemaSapatos.ViewModel
 {
-    class VendaViewModel
+    /// <summary>
+    /// ViewModel de venda, realiza as ligações entre as views e o contexto de venda
+    /// </summary>
+    class VendaViewModel : EntidadeBase
     {
         private VendaContexto vendaContexto;
 
-        public ObservableCollection<Venda> Vendas { get; }
+        private ObservableCollection<Venda> _vendas;
+
+        public ObservableCollection<Venda> Vendas
+        {
+            get { return _vendas; }
+            set { _vendas = value; Notificacao(); }
+        }
 
         public String Mensagem { get; set; }
 
         public Venda VendaSelecionada { get; set; }
 
+        private string _strBusca = string.Empty;
+
+        public string StrBusca
+        {
+            get { return _strBusca; }
+            set { _strBusca = value; Notificacao(); BuscarVenda(value); }
+        }
+
         public VendaViewModel()
         {
             vendaContexto = new VendaContexto();
             Vendas = new ObservableCollection<Venda>();
-            
+
             Vendas = vendaContexto.Carregar();
         }
 
@@ -36,7 +54,7 @@ namespace SistemaSapatos.ViewModel
         public void DeletarComando(Venda venda)
         {
             string itemDeletado = vendaContexto.Deletar(venda);
-            
+
             Mensagem = itemDeletado != null ? itemDeletado + " Deletada com sucesso!" : "Não foi possivel deletar a venda!";
         }
 
@@ -52,5 +70,22 @@ namespace SistemaSapatos.ViewModel
             vendaContexto.Carregar();
         }
 
+        public void BuscarVenda(string strBuscar)
+        {
+            if (!string.IsNullOrEmpty(strBuscar))
+            {
+                var resultadoBusca = new ObservableCollection<Venda>(Vendas
+            .Where(a => a.Modelo.Nome.Contains(strBuscar) ||
+            a.Cliente.Nome.Contains(strBuscar) ||
+            a.Preco.ToString().Contains(strBuscar) ||
+            a.Total.ToString().Contains(strBuscar) ||
+            a.DataVenda.ToString().Contains(strBuscar)));
+                Vendas = resultadoBusca;
+            }
+            else
+            {
+                Vendas = vendaContexto.Carregar();
+            }
+        }
     }
 }

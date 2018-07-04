@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace SistemaSapatosBase.Model
 {
+    /// <summary>
+    /// Representa um item de venda/compra
+    /// </summary>
     [Table("Vendas")]
     public class Venda : EntidadeBase
     {

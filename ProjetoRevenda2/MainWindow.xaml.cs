@@ -50,6 +50,9 @@ namespace ProjetoRevenda2
 
         // Caminho para gerar o diretorio de relatorios
         string pathRelatorios;
+        /// <summary>
+        /// Inicializa os componentes e define os contextos, caminhos e diretorios da aplicação
+        /// </summary>
         public MainWindow()
         {
             InitializeComponent();
@@ -64,6 +67,7 @@ namespace ProjetoRevenda2
 
             tabListaVendas.DataContext = VendaViewModel;
             tabListaClientes.DataContext = PessoaViewModel;
+
             pathRelatorios = AppDomain.CurrentDomain.BaseDirectory;
             pathRelatorios += "Relatorios";
             if (!Directory.Exists(pathRelatorios))
@@ -71,6 +75,7 @@ namespace ProjetoRevenda2
                 Directory.CreateDirectory(pathRelatorios);
                 return;
             }
+
         }
 
         #region Tela Modelos // Metodos da tela de modelos
@@ -112,19 +117,20 @@ namespace ProjetoRevenda2
             if (dataModelos.SelectedItems.Count > 1)
             {
                 IList<Modelo> listaDeletar = new List<Modelo>();
-                foreach(Modelo modelo in dataModelos.SelectedItems)
+                foreach (Modelo modelo in dataModelos.SelectedItems)
                 {
                     listaDeletar.Add(modelo);
                 }
-                if (MessageBox.Show("Deseja deletar os "+listaDeletar.Count+" modelos selecionados?", "Confirmar deletar.", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                if (MessageBox.Show("Deseja deletar os " + listaDeletar.Count + " modelos selecionados?", "Confirmar deletar.", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                 {
-                    foreach(Modelo modelo in listaDeletar)
+                    foreach (Modelo modelo in listaDeletar)
                     {
                         ModeloViewModel.ModeloSelecionado = modelo;
                         ModeloViewModel.DeletarComando(true);
-                    }     
+                    }
                 }
-            } else
+            }
+            else
             {
                 if (ModeloViewModel.ModeloSelecionado.IdModelo > 0)
                 {
@@ -419,9 +425,12 @@ namespace ProjetoRevenda2
         /// </summary>
         public void GerarXmlVendas()
         {
+            // Cria o arquivo xml
             var workbook = new XLWorkbook();
+            // Cria a planilha
             var worksheet = workbook.Worksheets.Add("Relatorio de Vendas");
             int x = 3;
+            // Adicionando os nomes das colunas
             worksheet.Cell("A1").Value = "Relatorio de Vendas - Gerado em " + String.Format("{0:dd/MM/yyyy} as {0:HH:mm:ss}", DateTime.Now);
             worksheet.Cell("A2").Value = "#";
             worksheet.Cell("B2").Value = "Modelo";
@@ -432,6 +441,7 @@ namespace ProjetoRevenda2
             worksheet.Cell("G2").Value = "Preço(u)";
             worksheet.Cell("H2").Value = "Quantidade";
             worksheet.Cell("I2").Value = "Total";
+            // Adicionando os valores as celulas vindos da lista de vendas
             foreach (Venda venda in VendaViewModel.Vendas)
             {
                 worksheet.Cell("A" + x).Value = venda.IdVenda;
@@ -446,31 +456,35 @@ namespace ProjetoRevenda2
                 x++;
             }
             worksheet.Cell("G" + x).Value = "Totais";
+            // Criando as formulas para soma de valores totais
             worksheet.Cell("H" + x).FormulaA1 = "SUM(H3:H" + (x - 1) + ")";
             worksheet.Cell("I" + x).FormulaA1 = "SUM(I3:I" + (x - 1) + ")";
-            //worksheet.Cell("D" + x).Value = null;
 
+            // Definindo a "range" da tabela, celula inicial e final
             var rngTable = worksheet.Range("A1:I" + (x));
+            // Formatando fonts e cores da tabela
             rngTable.Cell(1, 1).Style.Font.Bold = true;
             rngTable.Cell(1, 1).Style.Fill.BackgroundColor = XLColor.Gray;
             rngTable.Cell(1, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+            // Mesclando as celulas de titulo
             rngTable.Row(1).Merge();
-
+            // Definindo bordas da tabela
             rngTable.Style.Border.OutsideBorder = XLBorderStyleValues.Thick;
             rngTable.Style.Border.BottomBorder = XLBorderStyleValues.Thin;
+            // Definindo e formatando o cabeçalho/headers da tabela
             var rngHeaders = rngTable.Range("A2:I2");
             rngHeaders.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
             rngHeaders.Style.Font.Bold = true;
             rngHeaders.Style.Fill.BackgroundColor = XLColor.LightGray;
-
+            // Defininto e formatando footer da tabela
             var rngFooter = rngTable.Range(string.Format("A{0}:I{0}", x));
             rngFooter.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
             rngFooter.Style.Font.Bold = true;
             rngFooter.Style.Fill.BackgroundColor = XLColor.LightGray;
-
+            // Ajusta o tamanho das colunas de acordo com os valores
             worksheet.Columns(1, 9).AdjustToContents();
 
-            // workbook.SaveAs("BasicTable.xlsx");
+            // Criando caixa de dialogo de salvamento
             var saveFileDialog = new SaveFileDialog
             {
                 Filter = "Arquivos do Excel|*.xlsx",
@@ -478,11 +492,15 @@ namespace ProjetoRevenda2
                 InitialDirectory = pathRelatorios,
                 FileName = "Relatorio_Vendas_" + String.Format("{0:ddMMyyyy}", DateTime.Now)
             };
-
-            saveFileDialog.ShowDialog();
-
-            if (!String.IsNullOrWhiteSpace(saveFileDialog.FileName))
-                workbook.SaveAs(saveFileDialog.FileName);
+            // Verificando resultado de dialogbox e filename
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                if (!String.IsNullOrWhiteSpace(saveFileDialog.FileName))
+                {
+                    // Salvando o arquivo
+                    workbook.SaveAs(saveFileDialog.FileName);
+                }
+            }
         }
         /// <summary>
         /// Gera um arquivo xml com todos os clientes cadastrados no banco
@@ -553,10 +571,15 @@ namespace ProjetoRevenda2
                 FileName = "Relatorio_Clientes_" + String.Format("{0:ddMMyyyy}", DateTime.Now)
             };
 
-            saveFileDialog.ShowDialog();
 
-            if (!String.IsNullOrWhiteSpace(saveFileDialog.FileName))
-                workbook.SaveAs(saveFileDialog.FileName);
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                if (!String.IsNullOrWhiteSpace(saveFileDialog.FileName))
+                {
+                    workbook.SaveAs(saveFileDialog.FileName);
+                }
+            }
         }
+
     }
 }

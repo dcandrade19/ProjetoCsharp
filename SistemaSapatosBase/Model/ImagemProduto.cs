@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace SistemaSapatosBase.Model
 {
+    /// <summary>
+    /// Representa uma imagem do modelo
+    /// </summary>
     [Table("Imagens")]
     public class ImagemProduto
     {

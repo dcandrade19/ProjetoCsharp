@@ -9,7 +9,9 @@ using SistemaSapatosBase.Model;
 
 namespace SistemaSapatosBase.DataBase
 {
-    //Classe de contexto(db) que salva, altera ou exclui um modelo do banco.
+    /// <summary>
+    /// Classe de contexto de modelo de sapato
+    /// </summary>
     public class ModeloContexto
     {
         private Contexto contexto;

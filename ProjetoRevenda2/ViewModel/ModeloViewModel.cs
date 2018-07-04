@@ -7,22 +7,34 @@ using System.Windows;
 
 namespace SistemaSapatos.ViewModel
 {
+    /// <summary>
+    /// ViewModel de modelos de sapato, realiza as ligações entre as views e o contexto de modelo
+    /// </summary>
     public class ModeloViewModel
     {
         private ModeloContexto modeloContexto;
-
+        /// <summary>
+        /// Representa a coleção de modelos de sapatos em banco
+        /// </summary>
         public ObservableCollection<Modelo> Modelos { get; }
-
-        public String Mensagem { get; set; }
-
+        /// <summary>
+        /// Representa o modelo atualmente selecionado
+        /// </summary>
         public Modelo ModeloSelecionado { get; set; } = new Modelo();
-
+        /// <summary>
+        /// Representa o estoque atualmente selecionado
+        /// </summary>
         public Estoque EstoqueSelecionado { get; set; }
-
+        /// <summary>
+        /// Representa a quantidade atual selecionada
+        /// </summary>
         public int QuantidadeSelecionada { get; set; }
 
-        public ObservableCollection<Venda> PreVendas { get; set; } = new ObservableCollection<Venda>();
+        //public ObservableCollection<Venda> PreVendas { get; set; } = new ObservableCollection<Venda>();
 
+        /// <summary>
+        /// Representa a coleção de todas as quantidades disponiveis para o modelo
+        /// </summary>
         public ObservableCollection<int> QuantidadesDisponiveis { get; set; } = new ObservableCollection<int>();
 
         /// <summary>
@@ -37,6 +49,9 @@ namespace SistemaSapatos.ViewModel
             Modelos = modeloContexto.Carregar();
         }
 
+        /// <summary>
+        /// Chama o metodo do contexto que carrega os modelos 
+        /// </summary>
         public void CarregarComando()
         {
             modeloContexto.Carregar();
@@ -73,6 +88,10 @@ namespace SistemaSapatos.ViewModel
             }          
         }
         
+        /// <summary>
+        /// Realiza a confirmação via messagebox e deleta o modelo selecionado
+        /// </summary>
+        /// <param name="messageBoxOff">Define se os messagebox de confirmação devem ser exibidos</param>
         public void DeletarComando(bool messageBoxOff = false)
         {
             if (!messageBoxOff)
@@ -98,17 +117,27 @@ namespace SistemaSapatos.ViewModel
             }
         
         }
-
+        /// <summary>
+        /// Chama o metodo de edição de estoque do contexto
+        /// </summary>
+        /// <param name="estoques"> Lista de estoques para edição</param>
         public void EditarEstoquesComando(IList<Estoque> estoques)
         {
             modeloContexto.EditarEstoques(estoques);
         }
 
+        /// <summary>
+        /// Chama o metodo de busca por id do contexto
+        /// </summary>
+        /// <param name="id"> Id do modelo a deletar</param>
         public Modelo BuscarComando(int id)
         {
             return modeloContexto.BuscarId(id);
         }
 
+        /// <summary>
+        /// Calcula a quantidade atual disponivel para o estoque selecionado
+        /// </summary>
         public void CalcularQuantidadeDisponivel()
         {
             QuantidadesDisponiveis.Clear();

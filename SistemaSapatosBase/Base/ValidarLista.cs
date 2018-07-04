@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace SistemaSapatos.Base.Base
 {
+    /// <summary>
+    /// Classe para validação de listas via dataannotations
+    /// </summary>
     public class ValidarLista : ValidationAttribute
     {
 

@@ -10,34 +10,61 @@ using System.ComponentModel.DataAnnotations;
 
 namespace SistemaSapatos.ViewModel
 {
+    /// <summary>
+    /// ViewModel de cliente, realiza as ligações entre as views e o contexto de cliente
+    /// </summary>
     public class PessoaViewModel : EntidadeBase
     {
         private PessoaContexto pessoaContexto;
 
-        public ObservableCollection<Pessoa> Clientes { get; }
-
-        public String Mensagem { get; set; }
-
+        private ObservableCollection<Pessoa> _clientes;
+        /// <summary>
+        /// Representa a coleção de clientes/pessoas cadastradas
+        /// </summary>
+        public ObservableCollection<Pessoa> Clientes
+        {
+            get { return _clientes; }
+            set { _clientes = value; Notificacao(); }
+        }
+        /// <summary>
+        /// Representa a compra atualmente selecionada
+        /// </summary>
         public Venda CompraSelecionada { get; set; }
+
+        private string _strBusca = string.Empty;
+        /// <summary>
+        /// Representa o valor a ser localizado em buscas
+        /// </summary>
+        public string StrBusca
+        {
+            get { return _strBusca; }
+            set { _strBusca = value; Notificacao(); BuscarVenda(value); }
+        }
 
         private bool _isPessoaFisica = true;
 
         private bool _IsPessoaJuridica = false;
-
+        /// <summary>
+        /// Representa uma confirmação do tipo de cliente/pessoa
+        /// </summary>
         public bool IsPessoaFisica
         {
             get { return _isPessoaFisica; }
-            set { _isPessoaFisica = value;  IsPessoaJuridica = !value; Notificacao(); }
+            set { _isPessoaFisica = value; IsPessoaJuridica = !value; Notificacao(); }
         }
-
+        /// <summary>
+        /// Representa uma confirmação do tipo de cliente/pessoa
+        /// </summary>
         public bool IsPessoaJuridica
         {
             get { return _IsPessoaJuridica; }
-            set { _IsPessoaJuridica = value;  Notificacao(); }
+            set { _IsPessoaJuridica = value; Notificacao(); }
         }
 
         private string _cpfCnpjBusca = string.Empty;
-
+        /// <summary>
+        /// Representa o Cpf ou Cnpj usado para buscas
+        /// </summary>
         [Required(ErrorMessage = "Informe o Cpf/Cnpj do cliente!", AllowEmptyStrings = false)]
         public string CpfCnpjBusca
         {
@@ -46,24 +73,32 @@ namespace SistemaSapatos.ViewModel
         }
 
         private Pessoa _clienteSelecionado;
-
+        /// <summary>
+        /// Representa o cliente atualmente selecionado
+        /// </summary>
         public Pessoa ClienteSelecionado
         {
             get { return _clienteSelecionado; }
             set { _clienteSelecionado = value; Notificacao(); }
         }
+        /// <summary>
+        /// Construtor que cria e carrega os clientes do banco de dados
+        /// </summary>
         public PessoaViewModel()
         {
             pessoaContexto = new PessoaContexto();
             Clientes = new ObservableCollection<Pessoa>();
-            
+
             Clientes = pessoaContexto.Carregar();
         }
-
+        /// <summary>
+        /// Realiza as confirmações para salvar um cliente em banco e chama o metodo responsavel para salvar
+        /// </summary>
+        /// <param name="messageBoxOff">Define se as messagebox devem ser exibidas</param>
         public void SalvarComando(bool messageBoxOff = false)
         {
             ModeloViewModel modeloViewModel = new ModeloViewModel();
-            foreach(Venda venda in ClienteSelecionado.Compras)
+            foreach (Venda venda in ClienteSelecionado.Compras)
             {
                 venda.Modelo = null;
             }
@@ -71,7 +106,7 @@ namespace SistemaSapatos.ViewModel
             {
                 PessoaFisica pessoaFisica = new PessoaFisica();
                 pessoaFisica = (PessoaFisica)ClienteSelecionado;
-                if(pessoaFisica.Cpf == null)
+                if (pessoaFisica.Cpf == null)
                 {
                     pessoaFisica.Cpf = CpfCnpjBusca;
                 }
@@ -99,7 +134,8 @@ namespace SistemaSapatos.ViewModel
                             MessageBox.Show("Ocorreu um erro ao tentar salvar o cliente.",
                             "Não foi possivel salvar o cliente!", MessageBoxButton.OK, MessageBoxImage.Error);
                         }
-                    } else
+                    }
+                    else
                     {
                         pessoaContexto.Salvar(pessoaFisica);
                     }
@@ -110,7 +146,8 @@ namespace SistemaSapatos.ViewModel
                         "Não foi possivel salvar o cliente!", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
 
-            } else
+            }
+            else
             {
                 PessoaJuridica pessoaJuridica = new PessoaJuridica();
                 pessoaJuridica = (PessoaJuridica)ClienteSelecionado;
@@ -142,7 +179,8 @@ namespace SistemaSapatos.ViewModel
                             MessageBox.Show("Ocorreu um erro ao tentar salvar o cliente.",
                             "Não foi possivel salvar o cliente!", MessageBoxButton.OK, MessageBoxImage.Error);
                         }
-                    } else
+                    }
+                    else
                     {
                         pessoaContexto.Salvar(pessoaJuridica);
                     }
@@ -155,7 +193,9 @@ namespace SistemaSapatos.ViewModel
 
             }
         }
-
+        /// <summary>
+        /// Realiza as verificações via messagebox e chama o metodo responsável para deletar um cliente/pessoa
+        /// </summary>
         public void DeletarComando()
         {
             if (ClienteSelecionado.IdPessoa > 0)
@@ -173,27 +213,40 @@ namespace SistemaSapatos.ViewModel
                 }
             }
         }
-
+        /// <summary>
+        /// Chama o metodo do contexto responsável por carregar os clientes
+        /// </summary>
         public void CarregarComando()
         {
             pessoaContexto.Carregar();
         }
-
+        /// <summary>
+        /// Chama o metodo do contexto responsável por buscar o cliente via id
+        /// </summary>
+        /// <param name="id">Id do cliente a ser localizado</param>
+        /// <returns></returns>
         public Pessoa BuscarComando(int id)
         {
 
             return pessoaContexto.BuscarId(id);
         }
+        /// <summary>
+        /// Define o tipo do cliente selecionado
+        /// </summary>
         public void DefinirTipo()
         {
-            if(IsPessoaFisica)
+            if (IsPessoaFisica)
             {
-                ClienteSelecionado = new PessoaFisica();      
-            } else
+                ClienteSelecionado = new PessoaFisica();
+            }
+            else
             {
                 ClienteSelecionado = new PessoaJuridica();
             }
         }
+        /// <summary>
+        /// Busca um cliente através do Cpf ou Cnpj
+        /// </summary>
         public void BuscarClienteComando()
         {
             List<PessoaFisica> pessoasFisicas;
@@ -201,18 +254,19 @@ namespace SistemaSapatos.ViewModel
             if (IsPessoaFisica)
             {
                 pessoasFisicas = new List<PessoaFisica>();
-                foreach(Pessoa p in Clientes)
+                foreach (Pessoa p in Clientes)
                 {
-                    if(p.GetType() == typeof(PessoaFisica))
+                    if (p.GetType() == typeof(PessoaFisica))
                     {
                         pessoasFisicas.Add((PessoaFisica)p);
                     }
                 }
-               var Encontrado = (from cliente in pessoasFisicas where cliente.Cpf == CpfCnpjBusca select cliente).FirstOrDefault();
-               if(Encontrado != null)
+                var Encontrado = (from cliente in pessoasFisicas where cliente.Cpf == CpfCnpjBusca select cliente).FirstOrDefault();
+                if (Encontrado != null)
                 {
                     ClienteSelecionado = Encontrado;
-                } else
+                }
+                else
                 {
 
                     ClienteSelecionado = new PessoaFisica()
@@ -243,6 +297,31 @@ namespace SistemaSapatos.ViewModel
                         Cnpj = CpfCnpjBusca
                     };
                 }
+            }
+        }
+        /// <summary>
+        /// Busca os itens de venda cadastrados
+        /// </summary>
+        /// <param name="strBuscar">Valor a ser localizado dentre as vendas</param>
+        public void BuscarVenda(string strBuscar)
+        {
+            if (!string.IsNullOrEmpty(strBuscar))
+            {
+                var resultadoBusca = new ObservableCollection<Pessoa>(Clientes
+            .Where(a => a.Nome.Contains(strBuscar) ||
+            a.CpfCnpj.Contains(strBuscar) ||
+            a.DataNascimentoAb.ToString().Contains(strBuscar) ||
+            a.RazaoSocialAb.Contains(strBuscar) || 
+            a.EnderecoAb.Rua.Contains(strBuscar) ||
+            a.EnderecoAb.Estado.Contains(strBuscar) ||
+            a.EnderecoAb.Cidade.Contains(strBuscar) ||
+            a.EnderecoAb.Bairro.Contains(strBuscar) ||
+            a.EnderecoAb.Numero.ToString().Contains(StrBusca)));
+                Clientes = resultadoBusca;
+            }
+            else
+            {
+                Clientes = pessoaContexto.Carregar();
             }
         }
     }

@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ProjetoRevenda2"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         Background="{DynamicResource MaterialDesignPaper}"
@@ -80,7 +81,7 @@
                                 <TextBlock Foreground="DarkSlateGray"  VerticalAlignment="Center" Margin="0,0,10,0" FontWeight="Bold">Quantidade:</TextBlock>
                                 <ComboBox x:Name="cbxQuantidades" SelectedIndex="0"></ComboBox>
                             </StackPanel>
-                            <Button x:Name="btnAddEstoque" Click="BtnAddEstoque_Click">Add</Button>
+                            <Button x:Name="btnAddEstoque" ToolTip="Adicionar item de estoque." Click="BtnAddEstoque_Click">Add</Button>
                         </StackPanel>
                     </StackPanel>
                     <StackPanel  Orientation="Horizontal">
@@ -91,9 +92,9 @@
                     </StackPanel>
                     <StackPanel  Orientation="Horizontal" HorizontalAlignment="Right">
                         <StackPanel Orientation="Horizontal">
-                            <Button x:Name="btnSalvar" Margin="0,0,30,0" Click="BtnSalvar_Click">Salvar</Button>
-                            <Button x:Name="btnDeletar" Margin="0,0,30,0" Click="BtnDeletar_Click" Background="Red" BorderBrush="Red">Deletar</Button>
-                            <Button x:Name="btnLimparModelo" Click="BtnLimparModelo_Click" BorderBrush="{x:Null}" Background="{x:Null}" Foreground="Red">Limpar</Button>
+                            <Button x:Name="btnSalvar" ToolTip="Salvar modelo." Margin="0,0,30,0" Click="BtnSalvar_Click">Salvar</Button>
+                            <Button x:Name="btnDeletar" ToolTip="Deletar modelo." Margin="0,0,30,0" Click="BtnDeletar_Click" Background="Red" BorderBrush="Red">Deletar</Button>
+                            <Button x:Name="btnLimparModelo" ToolTip="Limpar campos." Click="BtnLimparModelo_Click" BorderBrush="{x:Null}" Background="{x:Null}" Foreground="Red">Limpar</Button>
                         </StackPanel>
                     </StackPanel>
                 </StackPanel>
@@ -145,7 +146,7 @@
                         <TextBlock Foreground="DarkSlateGray"  VerticalAlignment="Center" Margin="0,0,10,0" FontWeight="Bold">Quantidade:</TextBlock>
                         <ComboBox x:Name="cbxQuantidade" ItemsSource="{Binding Path=QuantidadesDisponiveis}" SelectedValue="{Binding Path=QuantidadeSelecionada}"  HorizontalAlignment="Left" Width="80"></ComboBox>
                     </StackPanel>
-                    <Button x:Name="btnAddVenda" Click="BtnAddVenda_Click">Adicionar</Button>
+                    <Button x:Name="btnAddVenda" ToolTip="Adicionar a lista de compras." Click="BtnAddVenda_Click">Adicionar</Button>
                 </StackPanel>
                 <StackPanel Grid.Column="2" Grid.Row="2">
                     <StackPanel Margin="0,0,0,26" Orientation="Horizontal">
@@ -155,10 +156,10 @@
                     <StackPanel Orientation="Horizontal">
                         <StackPanel Margin="0,0,30,26" Orientation="Vertical">
                             <TextBlock x:Name="txbCpfCnpj"  Foreground="DarkSlateGray" VerticalAlignment="Center" FontWeight="Bold"/>
-                            <TextBox x:Name="txtBuscaCpfCnpj" Text="{Binding CpfCnpjBusca,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}" Width="140"/>
+                            <TextBox x:Name="txtBuscaCpfCnpj" Text="{Binding Path=CpfCnpjBusca,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}" Width="140"/>
                         </StackPanel>
                         <StackPanel  Orientation="Horizontal">
-                            <Button x:Name="btnBuscarCliente"  Click="BtnBuscarCliente_Click">Buscar</Button>
+                            <Button x:Name="btnBuscarCliente" ToolTip="Buscar cliente por Cpf/Cnpj." Click="BtnBuscarCliente_Click">Buscar</Button>
                         </StackPanel>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
@@ -204,9 +205,9 @@
                 </StackPanel>
                 <StackPanel  Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="2" Grid.Row="3">
                     <StackPanel Orientation="Horizontal">
-                        <Button x:Name="btnSalvarCliente" Margin="0,0,30,0" Click="BtnSalvarCliente_Click">Salvar</Button>
-                        <Button x:Name="btnDeletarCliente" Margin="0,0,30,0" Click="BtnDeletarCliente_Click" Background="Red" BorderBrush="Red">Deletar</Button>
-                        <Button x:Name="btnLimparCliente" Click="BtnLimparCliente_Click" BorderBrush="{x:Null}" Background="{x:Null}" Foreground="Red">Limpar</Button>
+                        <Button x:Name="btnSalvarCliente" ToolTip="Salvar cliente/vendas." Margin="0,0,30,0" Click="BtnSalvarCliente_Click">Salvar</Button>
+                        <Button x:Name="btnDeletarCliente" ToolTip="Deletar cliente/vendas." Margin="0,0,30,0" Click="BtnDeletarCliente_Click" Background="Red" BorderBrush="Red">Deletar</Button>
+                        <Button x:Name="btnLimparCliente" ToolTip="Limpar campos." Click="BtnLimparCliente_Click" BorderBrush="{x:Null}" Background="{x:Null}" Foreground="Red">Limpar</Button>
                     </StackPanel>
                 </StackPanel>
             </Grid>
@@ -223,8 +224,17 @@
                     <RowDefinition Height="446"></RowDefinition>
                 </Grid.RowDefinitions>
                 <TextBlock Foreground="DarkSlateGray" Grid.Column="0" Grid.Row="0" FontWeight="Bold">Vendas</TextBlock>
+
                 <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right">
-                    <Button x:Name="btnGerarXmlVendas"  Click="BtnGerarXmlVendas_Click" Background="#FF198F4E" BorderBrush="#FF198F4E">Gerar Relatorio XML</Button>
+                    
+                    <StackPanel Orientation="Horizontal" ToolTip="Informe modelo, cliente, valor ou data para localizar.">
+                       
+                        <materialDesign:PackIcon Kind="DatabaseSearch" Foreground="DarkSlateGray" VerticalAlignment="Bottom" HorizontalAlignment="Center"
+                                                 Width="22" Height="22"                                                 
+                                                 />
+                    <TextBox x:Name="txtBusca"  Text="{Binding StrBusca,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="4,0,20,0" Width="150"/>
+                    </StackPanel>
+                    <Button x:Name="btnGerarXmlVendas" ToolTip="Salvar como relatorio xml." Click="BtnGerarXmlVendas_Click" Background="#FF198F4E" BorderBrush="#FF198F4E">Gerar Relatorio XML</Button>
                 </StackPanel>
                 <DataGrid x:Name="dataListaVendas" AutoGenerateColumns="False" IsReadOnly="True" Grid.Column="0" Grid.Row="2" ItemsSource="{Binding Vendas}" SelectedItem="{Binding VendaSelecionada}" Margin="0,0,0,10">
                     <DataGrid.Columns>
@@ -253,8 +263,16 @@
                 </Grid.RowDefinitions>
                 <TextBlock Foreground="DarkSlateGray" Grid.Column="0" Grid.Row="0" FontWeight="Bold">Clientes</TextBlock>
                 <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right">
-                    <Button x:Name="btnGerarXmlClientes"  Click="BtnGerarXmlClientes_Click" Background="#FF198F4E" BorderBrush="#FF198F4E">Gerar Relatorio XML</Button>
+                    <StackPanel Orientation="Horizontal" ToolTip="Informe qualquer dado do cliente para localizar.">
+
+                    <materialDesign:PackIcon Kind="DatabaseSearch" Foreground="DarkSlateGray" VerticalAlignment="Bottom" HorizontalAlignment="Center"
+                                                 Width="22" Height="22"                                                 
+                                                 />
+                    <TextBox x:Name="txtBuscaC"  Text="{Binding StrBusca,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="4,0,20,0" Width="150"/>
                 </StackPanel>
+                    <Button x:Name="btnGerarXmlClientes" ToolTip="Salvar como relatorio xml." Click="BtnGerarXmlClientes_Click" Background="#FF198F4E" BorderBrush="#FF198F4E">Gerar Relatorio XML</Button>
+                </StackPanel>
+                
                 <DataGrid x:Name="dataListaClientes" AutoGenerateColumns="False" IsReadOnly="True" Grid.Column="0" Grid.Row="2" ItemsSource="{Binding Clientes}" SelectedItem="{Binding ClienteSelecionado}" Margin="0,0,0,10" >
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="#" Binding="{Binding IdPessoa}"/>

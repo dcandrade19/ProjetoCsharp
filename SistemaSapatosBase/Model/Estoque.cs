@@ -4,6 +4,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SistemaSapatosBase.Model
 {
+    /// <summary>
+    /// Representa um item de estoque
+    /// </summary>
     [Table("Estoques")]
     public class Estoque : EntidadeBase
     {

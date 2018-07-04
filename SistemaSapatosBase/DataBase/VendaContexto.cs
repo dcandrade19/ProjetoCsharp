@@ -9,6 +9,9 @@ using SistemaSapatosBase.Model;
 
 namespace SistemaSapatosBase.DataBase
 {
+    /// <summary>
+    /// Classe de contexto de venda
+    /// </summary>
     public class VendaContexto
     {
         private Contexto contexto;

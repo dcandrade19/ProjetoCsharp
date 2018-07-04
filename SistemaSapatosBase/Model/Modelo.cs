@@ -12,7 +12,9 @@ using System.Threading.Tasks;
 
 namespace SistemaSapatosBase.Model
 {
-
+    /// <summary>
+    /// Representa um modelo de sapato
+    /// </summary>
     [Table("Modelos")]
     public class  Modelo : EntidadeBase
     {

@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace SistemaSapatosBase.Model
 {
+    /// <summary>
+    /// Representa um cliente do tipo pessoa fisica
+    /// </summary>
     public class PessoaFisica : Pessoa
     {
         private String _cpf;
@@ -31,5 +34,23 @@ namespace SistemaSapatosBase.Model
             set { _dataNascimento = value; Notificacao(); }
         }
 
+        public override DateTime? DataNascimentoAb
+        {
+            get { return DataNascimento; }
+        }
+
+        public override string CpfCnpj
+        {
+            get { return Cpf; }
+        }
+
+        public override string RazaoSocialAb
+        {
+            get { return ""; }
+        }
+
+        public override Endereco EnderecoAb {
+            get { return new Endereco(); }
+        }
     }
 }

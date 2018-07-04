@@ -3,7 +3,9 @@ using System.Data.Entity;
 
 namespace SistemaSapatosBase.DataBase
 {
-    // Essa é a classe de contexto ela extende a classe "DbContext" que é uma classe do Entity Framework
+    /// <summary>
+    /// Classe de contexto extende a classe DbContext do entityframework
+    /// </summary>
     class Contexto : DbContext
     {
         public Contexto()
@@ -11,7 +13,7 @@ namespace SistemaSapatosBase.DataBase
         {
 
         }
-        // DbSet é uma coleção do Entity Framework que recebe a Entitade que vc vai salvar no banco
+        // DbSet é uma coleção do Entity Framework que recebe as entidades que vão ser salvas em banco
         public DbSet<Pessoa> Clientes { get; set; }
         public DbSet<Venda> Vendas { get; set; }
         public DbSet<Modelo> Modelos { get; set; }

@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace SistemaSapatosBase.Model
 {
+    /// <summary>
+    /// Representa um cliente do tipo pessoa juridica
+    /// </summary>
     public class PessoaJuridica : Pessoa
     {
 
@@ -24,19 +27,39 @@ namespace SistemaSapatosBase.Model
         public String RazaoSocial
         {
             get { return _razaoSocial; }
-            set { _razaoSocial = value;Notificacao(); ValidateModelProperty(value); }
+            set { _razaoSocial = value; Notificacao(); ValidateModelProperty(value); }
+        }
+
+        public override string RazaoSocialAb
+        {
+            get { return RazaoSocial; }
         }
 
         public String Cnpj
         {
             get { return _cnpj; }
-            set { _cnpj = value;Notificacao(); ValidateModelProperty(value); }
+            set { _cnpj = value; Notificacao(); ValidateModelProperty(value); }
         }
 
         public Endereco Endereco
         {
             get { return _endereco; }
-            set { _endereco = value;Notificacao(); }
+            set { _endereco = value; Notificacao(); }
+        }
+
+        public override string CpfCnpj
+        {
+            get { return Cnpj; }
+        }
+
+        public override DateTime? DataNascimentoAb
+        {
+            get { return new DateTime(); }
+        }
+
+        public override Endereco EnderecoAb
+        {
+            get { return Endereco; }
         }
     }
 }
